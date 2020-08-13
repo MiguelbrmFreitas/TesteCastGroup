@@ -7,17 +7,17 @@ Mais detalhes serão adicionados aqui nos commits ao longo do desenvolvimento.
 
 ## Features
 - [X] Cadastrar categoria (apenas pela API para configurar as categoriais iniciais no banco)
-- [] Listar categorias
-- [] Cadastrar curso
-- [] Listar curso
-- [] Atualizar curso
-- [] Remover curso
-- [] Validar se uma data de início de um curso não é maior que uma data de final
-- [] Validar e não permitir que um curso seja incluído no mesmo período que outro 
-- [] Pesquisar curso por descrição (opcional)
-- [] Estilizar o app com Material Design (opcional)
-- [] Mais funcionalidades a incluir e descrever (opcional)
-- [] Aplicação de um ou mais padrões de projeto (opcional)
+- [ ] Listar categorias
+- [ ] Cadastrar curso
+- [ ] Listar curso
+- [ ] Atualizar curso
+- [ ] Remover curso
+- [ ] Validar se uma data de início de um curso não é maior que uma data de final
+- [ ] Validar e não permitir que um curso seja incluído no mesmo período que outro 
+- [ ] Pesquisar curso por descrição (opcional)
+- [ ] Estilizar o app com Material Design (opcional)
+- [ ] Mais funcionalidades a incluir e descrever (opcional)
+- [ ] Aplicação de um ou mais padrões de projeto (opcional)
 
 ## Android
 
