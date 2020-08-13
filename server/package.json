@@ -1,0 +1,33 @@
+{
+  "name": "my-contact-keeper",
+  "version": "1.0.0",
+  "description": "Code for project 2 of Udemy course React Front to Back (https://www.udemy.com/course/modern-react-front-to-back/learn/lecture/14969916#questions)",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODCTION=false npm install --prefix client && npm run build --prefix client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MiguelbrmFreitas/my-contact-keeper.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MiguelbrmFreitas/my-contact-keeper/issues"
+  },
+  "homepage": "https://github.com/MiguelbrmFreitas/my-contact-keeper#readme",
+  "dependencies": {
+    "config": "^3.3.1",
+    "express": "^4.17.1",
+    "express-validation": "^3.0.5",
+    "express-validator": "^6.6.0",
+    "mongoose": "^5.9.16"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}

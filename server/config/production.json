@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://<YOUR_USER>:<YOUR_PASSWORD>@contactkeeper-w6el0.gcp.mongodb.net/<dbname>?retryWrites=true",
+    "jwtSecret": "banana"
+}

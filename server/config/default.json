@@ -1,0 +1,4 @@
+{
+    "mongoURI": "mongodb+srv://Miguel:testecastgroup@cluster0.xbigf.mongodb.net/cursos?retryWrites=true&w=majority",
+    "jwtSecret": "banana"
+}
