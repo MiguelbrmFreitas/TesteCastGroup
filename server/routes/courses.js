@@ -26,7 +26,7 @@ router.post('/', [
         check('description', 'É necessário colocar uma descrição').not().isEmpty(),
         check('start_date', 'É necessário colocar uma data de início').not().isEmpty(),
         check('end_date', 'É necessário colocar uma data de final').not().isEmpty(),
-        check('category', 'É necessário colocar uma categoria').not().isEmpty()
+        check('category', 'É necessário colocar uma categoria').not().isEmpty(),
     ]
 ], 
 async (req, res) => {
@@ -37,24 +37,41 @@ async (req, res) => {
 
     const { description, start_date, end_date, students_per_class} = req.body;
 
+    // Valida se a data de início é menor que a data de final
+    if (start_date >= end_date) {
+        const dateErrors = [
+            {
+                "msg": "A data de início deve ser menor que a data de final.",
+                "param": "start_date",
+                "location": "body"
+            }
+        ]
+
+        return res.status(400).json({ errors: dateErrors });
+    }
+
     //TODO: Validação das regras de negócio
 
-    try {
-        const newCourse = new Course({
-            description,
-            start_date,
-            end_date,
-            students_per_class,
-            category: req.category.id,
-        })
+    console.log(new Date(start_date * 1000).toUTCString(), new Date(end_date).getDay())
 
-        const course = await newCourse.save();
+    res.json(req.body)
 
-        res.json(course);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send('Erro do Servidor')
-    }
+    // try {
+    //     const newCourse = new Course({
+    //         description,
+    //         start_date,
+    //         end_date,
+    //         students_per_class,
+    //         category: req.category.code,
+    //     })
+
+    //     const course = await newCourse.save();
+
+    //     res.json(course);
+    // } catch (err) {
+    //     console.error(err.message);
+    //     res.status(500).send('Erro do Servidor')
+    // }
 });
 
 // @route   PUT    api/courses/:id
