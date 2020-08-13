@@ -1,5 +1,5 @@
 # TesteCastGroup
-Repositório para a avaliação técnica do processo seletivo da Cast Group.
+Repositório para a avaliação técnica do processo seletivo da Cast Group que envolve um app Android e um backend com conexão com Banco de Dados.
 
 # Especificações técnicas
 
