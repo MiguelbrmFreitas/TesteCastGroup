@@ -12,7 +12,7 @@ Mais detalhes serão adicionados aqui nos commits ao longo do desenvolvimento.
 - [ ] Listar curso
 - [ ] Atualizar curso
 - [ ] Remover curso
-- [ ] Validar se uma data de início de um curso não é maior que uma data de final
+- [X] Validar se uma data de início de um curso não é maior que uma data de final
 - [ ] Validar e não permitir que um curso seja incluído no mesmo período que outro 
 - [ ] Pesquisar curso por descrição (opcional)
 - [ ] Estilizar o app com Material Design (opcional)
