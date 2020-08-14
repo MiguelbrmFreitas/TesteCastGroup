@@ -99,10 +99,11 @@ async (req, res) => {
 // @access  Public
 router.put('/:id', async (req, res) => {
     const { description, start_date, end_date, students_per_class } = req.body;
+    console.log(req.body)
 
     //TODO: Validação das regras de negócio
 
-    // Cria o objeto do curso
+    // Cria o objeto do curso apenas com os campos enviados
     const courseFields = {};
     if (description) courseFields.description = description;
     if (start_date) courseFields.start_date = start_date;
@@ -116,15 +117,8 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({msg: 'Curso não encontrado'});
         }
 
-        // Garantir que um curso pertença a uma categoria
-        if (course.category.toString() !== req.category.id) {
-            return res.status(401).json({ msg: 'Sem Autorização'} );
-        }
-
-        course = await Course.findByIdAndUpdate(req.params.id, 
-            {
-                $set: courseFields
-            },
+        // Atualiza no banco de dados
+        course = await Course.findByIdAndUpdate({ _id: req.params.id }, courseFields,
             {
                 new: true
             });
@@ -147,16 +141,10 @@ router.delete('/:id', async (req, res) => {
             res.status(404).json({msg: 'Curso não encontrado'});
         }
 
-        // Garantir que um curso pertença a uma categoria
-        if (course.category.toString() !== req.category.id) {
-            return res.status(401).json({ msg: 'Sem Autorização'} );
-        }
-
+        // Deleta do banco de dados
         await Course.findByIdAndRemove(req.params.id);
 
-        console.log(course)
-
-        res.json({msg: `Course ${course.description} deleted`});
+        res.json({msg: `Curso ${course.description} deletado`});
     } catch(err) {
         console.error(err.message);
         res.status(500).send('Erro do Servidor')
