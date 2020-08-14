@@ -7,11 +7,13 @@ const CourseSchema = mongoose.Schema({
   },
   start_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    required: true
   },
   end_date: {
     type: Date,
-    default: Date.now
+    default: Date.now,
+    required: true
   },
   students_per_class: {
     type: Number,

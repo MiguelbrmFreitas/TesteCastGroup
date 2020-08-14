@@ -6,11 +6,25 @@ const Category = require('../models/Category');
 const Course = require('../models/Course');
 
 // @route   GET    api/courses
-// @desc    Get all courses from a category
+// @desc    Get de cursos podendo filtrar por categoria
 // @access  Public
 router.get('/', async (req, res) => {
     try {
-        const courses = await Course.find({category: req.category.id}).sort({start_date: -1});
+        // Pega o parâmetro category
+        const category = req.query.category;
+        
+        // Cria a query se o parâmetro existir
+        let query;
+        if (category) {
+            query = category;
+        } else {
+            query = {}
+        }
+
+        // Procura no banco de dados e faz o populate no campo de categoria
+        const courses = await Course.find(query).populate('category').sort({start_date: -1});
+
+        // Retorna os cursos encontrados
         res.json(courses);
     } catch (err) {
         console.error(err.message);
@@ -19,7 +33,7 @@ router.get('/', async (req, res) => {
 });
 
 // @route   POST    api/courses
-// @desc    Add new course
+// @desc    Adicionar novo curso
 // @access  Public
 router.post('/', [
     [
@@ -35,10 +49,13 @@ async (req, res) => {
         return res.status(400).json({ errors: errors.array() })
     }
 
-    const { description, start_date, end_date, students_per_class} = req.body;
+    const { description, start_date, end_date, students_per_class, category } = req.body;
+
+    console.log(category)
 
     // Valida se a data de início é menor que a data de final
     if (start_date >= end_date) {
+        // Cria um erro
         const dateErrors = [
             {
                 "msg": "A data de início deve ser menor que a data de final.",
@@ -47,31 +64,34 @@ async (req, res) => {
             }
         ]
 
+        // Retorna o erro com status 400
         return res.status(400).json({ errors: dateErrors });
     }
 
-    //TODO: Validação das regras de negócio
+    try {
+        // Cria a categoria 
+        // let populatedCategory = await Category.findById(category).populate('category').exec((err, c) => {
+        //     if (err) console.error(err)
+        // });
 
-    console.log(new Date(start_date * 1000).toUTCString(), new Date(end_date).getDay())
+        //console.log(populatedCategory)
 
-    res.json(req.body)
+        // Cria o novo curso
+        const newCourse = new Course({
+            description,
+            start_date,
+            end_date,
+            students_per_class,
+            category: category,
+        })
 
-    // try {
-    //     const newCourse = new Course({
-    //         description,
-    //         start_date,
-    //         end_date,
-    //         students_per_class,
-    //         category: req.category.code,
-    //     })
+        const course = await newCourse.save();
 
-    //     const course = await newCourse.save();
-
-    //     res.json(course);
-    // } catch (err) {
-    //     console.error(err.message);
-    //     res.status(500).send('Erro do Servidor')
-    // }
+        res.json(course);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erro do Servidor')
+    }
 });
 
 // @route   PUT    api/courses/:id
