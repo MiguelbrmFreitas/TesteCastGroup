@@ -48,9 +48,9 @@ Cada curso possui obrigatoriamente descrição, data de início, data de final e
 npm install
 ```
 
-#### Configuração do MongoDB
+#### Banco de Dados
 
-Foi escolhido o MongoDB como banco de dados. É um banco de dados orientado a documentos e foi criada uma model <b>Course</b> para representar um curso e uma model <b>Category</b> para representar uma categoria.
+Foi escolhido o MongoDB como banco de dados. É um banco de dados orientado a documentos e foi criada uma model <b>Course</b> para representar um curso com todos os atributos anteriormente citados e uma model <b>Category</b> para representar uma categoria. Dentro da model <b>Course</b> existe uma referência para uma model de <b>Category</b>.
 
 Como configuração prévia do banco de dados, foram cadastradas 4 categorias:
 ![Lista de Categorias](img/Categories_Mongo.png)
