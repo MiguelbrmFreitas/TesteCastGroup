@@ -7,9 +7,18 @@ const Course = require('../models/Course');
 
 
 // Erro caso a data de início seja maior ou igual à de final
-const dateErrors = [
+const startDateGteError = [
     {
         "msg": "A data de início deve ser menor que a data de final.",
+        "param": "start_date",
+        "location": "body"
+    }
+]
+
+// Erro caso a data de início seja menor ou igual à data atual
+const startDateLteError = [
+    {
+        "msg": "A data de início deve ser maior que a data atual.",
         "param": "start_date",
         "location": "body"
     }
@@ -20,6 +29,15 @@ const intervalErrors = [
     {
         "msg": "Já existe um curso cadastrado nesta data.",
         "param": "start_date",
+        "location": "body"
+    }
+]
+
+// Erro caso o número de alunos seja igual ou menor que zero
+const studentsNumberError = [
+    {
+        "msg": "O curso deve ter um aluno ou mais.",
+        "param": "students_per_class",
         "location": "body"
     }
 ]
@@ -69,7 +87,15 @@ async (req, res) => {
 
     // Valida se a data de início não é maior ou igual à data de final
     if (start_date >= end_date) {
-        return res.status(400).json({ errors: dateErrors });
+        return res.status(400).json({ errors: startDateGteError });
+    } else if (start_date < ( Math.floor(Date.now() / 1000)) ) { // Verifica se a data de início é maior do que a data atual
+        console.log(( Math.floor(Date.now() / 1000)), start_date )
+        return res.status(400).json({ errors: startDateLteError });
+    }
+
+    // Verifica se o atributo students_per_class foi inserido e se é menor ou igual a zero
+    if (students_per_class && students_per_class <= 0) {
+        return res.status(400).json({ errors: studentsNumberError });
     }
 
     // Verifica se já não há um curso incluso neste intervalo
@@ -127,8 +153,11 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({msg: 'Curso não encontrado'});
         }
 
+        // Verifica se datas de início e final existem e se a data de início é maior ou igual à data de final
         if (start_date && end_date && start_date >= end_date) {
-            return res.status(400).json({ errors: dateErrors });
+            return res.status(400).json({ errors: startDateGteError });
+        } else if (start_date < Date.now()) { // Verifica se a data de início é maior do que a data atual
+            return res.status(400).json({ errors: startDateLteError });
         }
 
         // Atualiza no banco de dados

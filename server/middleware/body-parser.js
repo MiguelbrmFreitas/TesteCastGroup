@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
+// Criado para o caso da aplicação crescer, mas não foi necessário utilizar
 module.exports = function(req, res, next) {
     // Get token from header
     token = req.header('x-auth-token');

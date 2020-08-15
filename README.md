@@ -1,5 +1,5 @@
 # TesteCastGroup
-Repositório para a avaliação técnica do processo seletivo da Cast Group que envolve um app Android e um backend com conexão com Banco de Dados.
+Repositório para a avaliação técnica do processo seletivo da Cast Group que envolve um app Android e um backend com conexão com Banco de Dados. Foram implementados extras e adicionais conforme detalhes em **Especificações Técnicas**.
 
 # Especificações técnicas
 
@@ -15,7 +15,8 @@ Aplicação Android nativa em Java para se conectar com a API descrita abaixo e 
 A aplicação segue boas práticas de desenvolvimento orientado a objetos, engenharia de software, tratamento de erros, usabilidade e UX.
 
 ### TODO List
-- [X] Criar estrutura de classes 
+- [X] Criar diagrama de casos de uso
+- [X] Criar estrutura de classes e pacotes
 - [X] Gerar documentação JavaDoc
 - [ ] Conectar com a API feita para este projeto
 - [ ] Mostrar lista de cursos na tela
@@ -66,6 +67,8 @@ Cada curso possui obrigatoriamente descrição, data de início, data de final e
 - [X] Rota DELETE /courses/:id - Deletar curso
 - [X] Validar se a data de início de um curso não é maior que a data de final
 - [X] Validar e não permitir que um curso seja incluído no mesmo período que outro 
+- [X] Validar se o número de estudantes (caso exista) é maior ou igual a um
+- [X] Validar se o curso não está sendo registrado com a data de início anterior à data atual
 
 ### Como usar
 
