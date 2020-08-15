@@ -5,6 +5,9 @@ Repositório para a avaliação técnica do processo seletivo da Cast Group que 
 
 Implementação de uma API para rotas do backend e de conexão com o banco de dados e de um app Android que se conecte com essa API, apresente dados na tela e receba input dos usuários. Mais detalhes sobre o que foi feito no app e na API nas subseções abaixo.
 
+## Diagrama de Casos de Uso
+![Diagrama de Casos de Uso](img/UseCaseDiagram.png)
+
 ## Android
 
 Aplicação Android nativa em Java para se conectar com a API descrita abaixo e mostrar uma lista de cursos de formação da Cast Group na tela e receber inputs do usuário para operações de adicionar, editar, remover e filtrar cursos. 
@@ -52,7 +55,8 @@ npm install
 
 Foi escolhido o MongoDB como banco de dados. É um banco de dados orientado a documentos e foi criada uma model <b>Course</b> para representar um curso com todos os atributos anteriormente citados e uma model <b>Category</b> para representar uma categoria. Dentro da model <b>Course</b> existe uma referência para uma model de <b>Category</b>.
 
-Como configuração prévia do banco de dados, foram cadastradas 4 categorias:
+Como configuração prévia do banco de dados, foram cadastradas 4 categorias utilizando o próprio método POST implementado. Cada Categoria possui campos *code* e *description*, além de um identificador único criado pelo Mongo.
+
 ![Lista de Categorias](img/Categories_Mongo.png)
 
 Edite o arquivo /config/default.json para incluir a URL correta do seu banco se for testar localmente.

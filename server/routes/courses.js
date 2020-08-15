@@ -73,7 +73,7 @@ async (req, res) => {
     }
 
     // Verifica se já não há um curso incluso neste intervalo
-    const course = Course.findOne({
+    const course = await Course.findOne({
         $and:[
             {start_date:{$gte: start_date}},
             {end_date:{$lte: end_date}}
@@ -81,6 +81,7 @@ async (req, res) => {
     })
     
     if (course) {
+        console.log(course)
         return res.status(400).json({ errors: intervalErrors });
     }
 
