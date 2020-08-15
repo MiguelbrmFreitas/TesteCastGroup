@@ -4,7 +4,23 @@ const {check, validationResult} = require('express-validator');
 
 const Category = require('../models/Category');
 
-// @route   POST    api/category
+// @route   GET    api/categories
+// @desc    Get de todas as categorias
+// @access  Public
+router.get('/', async (req, res) => {
+    try {
+        // Pega todas as categorias do banco de dados
+        const categories = await Category.find().sort({start_date: -1});
+
+        // Retorna as categorias encontradas
+        res.json(categories);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Erro no Servidor');
+    }
+});
+
+// @route   POST    api/categories
 // @desc    Register a category
 // @access  Public
 router.post('/', async (req, res) => {

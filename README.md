@@ -43,6 +43,7 @@ Cada curso possui obrigatoriamente descrição, data de início, data de final e
 
 
 ### TODO List
+- [X] Rota GET /categories - Lista categorias existentes
 - [X] Rota POST /categories - Cadastrar categoria
 - [X] Rota POST /courses - Cadastrar um novo curso
 - [X] Rota GET /courses - Listar todos os cursos cadastrados

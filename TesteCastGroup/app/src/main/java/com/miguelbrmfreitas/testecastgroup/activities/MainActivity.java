@@ -1,9 +1,10 @@
-package com.miguelbrmfreitas.testecastgroup;
+package com.miguelbrmfreitas.testecastgroup.activities;
 
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.miguelbrmfreitas.testecastgroup.R;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

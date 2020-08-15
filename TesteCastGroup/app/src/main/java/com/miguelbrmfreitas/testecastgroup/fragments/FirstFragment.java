@@ -1,9 +1,11 @@
-package com.miguelbrmfreitas.testecastgroup;
+package com.miguelbrmfreitas.testecastgroup.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.miguelbrmfreitas.testecastgroup.R;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
