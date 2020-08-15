@@ -1,4 +1,4 @@
 {
-    "mongoURI": "mongodb+srv://<YOUR_USER>:<YOUR_PASSWORD>@contactkeeper-w6el0.gcp.mongodb.net/<dbname>?retryWrites=true",
+    "mongoURI": "mongodb+srv://Miguel:testecastgroup@cluster0.xbigf.mongodb.net/cursos?retryWrites=true&w=majority",
     "jwtSecret": "banana"
 }

@@ -26,6 +26,12 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [ ] Aplicação de um ou mais padrões de projeto
 - [ ] Mais funcionalidades a incluir e descrever
 
+### Como rodar
+
+Abra a pasta **TesteCastGroup** da raiz pelo Android Studio como um projeto. Uma vez carregado, ir em **Build -> Make Project** e depois no ícone de **Run**, escolhendo o dispositivo virtual ou físico em que o app será executado.  
+
+Para facilitar os testes dispensando configurações adicionais para o rodar o servidor e o banco de dados manualmente, foi feito o deploy da aplicação de backend para o Heroku. Portanto, ao abrir o aplicativo Android ele já estará integrado com uma versão em produção do servidor implementado aqui e acessando o mesmo banco de dados, podendo ver os exemplos que estarão disponibilizados. Mais detalhes na subseção de **deploy** abaixo na descrição do servidor.
+
 ## Servidor
 
 Aplicação em node.js + Express que implementa um CRUD para realizar operações de pesquisa, inclusão, alteração e exclusão de cursos para turmas de formação da Cast Group.
@@ -34,8 +40,11 @@ Foi implementada função de cadastro de categoria (POST) para criar os registro
 
 Cada curso possui obrigatoriamente descrição, data de início, data de final e categoria (que tem um model próprio com código e descrição). Opcionalmente pode ser colocado número de alunos.
 
+
+
 ### TODO List
-- [X] Rota POST /categories - cadastrar categoria
+- [X] Rota POST /categories - Cadastrar categoria
+- [X] Rota POST /courses - Cadastrar um novo curso
 - [X] Rota GET /courses - Listar todos os cursos cadastrados
 - [X] Rota GET /courses + query param category - Pesquisar por cursos de determinada categoria
 - [X] Rota PUT /courses/:id - Editar curso existente
@@ -59,11 +68,16 @@ Como configuração prévia do banco de dados, foram cadastradas 4 categorias ut
 
 ![Lista de Categorias](img/Categories_Mongo.png)
 
-Edite o arquivo /config/default.json para incluir a URL correta do seu banco se for testar localmente.
+Edite o arquivo /config/default.json para incluir a URL correta do seu banco se for testar localmente com seus próprios dados.
 
 #### Rodar servidor em modo de desenvolvimento
 
 ```bash
 npm run server  # Express API: 5001
 ```
+
+#### Deploy
+Foi feito o deploy da aplicação node.js para o Heroku na URL: https://teste-cast-group.herokuapp.com/.
+
+É possível assim utilizar a API por esta URL para testar as rotas como uma alternativa a rodar o servidor localmente.
 

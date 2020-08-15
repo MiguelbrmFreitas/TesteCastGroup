@@ -1,25 +1,16 @@
 {
-  "name": "my-contact-keeper",
+  "name": "teste-cast-group-server",
   "version": "1.0.0",
-  "description": "Code for project 2 of Udemy course React Front to Back (https://www.udemy.com/course/modern-react-front-to-back/learn/lecture/14969916#questions)",
+  "description": "Código para o backend da avaliação técnica da Cast Group",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "server": "nodemon server.js",
-    "heroku-postbuild": "NPM_CONFIG_PRODCTION=false npm install --prefix client && npm run build --prefix client"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/MiguelbrmFreitas/my-contact-keeper.git"
+    "server": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/MiguelbrmFreitas/my-contact-keeper/issues"
-  },
-  "homepage": "https://github.com/MiguelbrmFreitas/my-contact-keeper#readme",
   "dependencies": {
     "@types/jsonwebtoken": "^8.5.0",
     "config": "^3.3.1",
