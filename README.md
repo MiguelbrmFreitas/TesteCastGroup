@@ -37,8 +37,10 @@ Então entrando em um pacote e depois em uma respectiva classe ou interface, tem
 
 ![JavaDoc Example](img/javadocexample2.png)
 
-## Padrões de Projeto
-Foi escolhido o padrão de projeto Observer para lidar com as chamadas à API feitas pelo app. Foi implementada uma classe **Subject** e outra **Observer** em que os observers (activities e fragments) se registram a um subject (chamadas de API), chamando callbacks nos observers quando são notificados pelo subject. Mais detalhes das classes podem ser conferidas na documentação.
+### Padrões de Projeto
+
+#### Observer
+Foi escolhido o padrão de projeto **Observer** para lidar com as chamadas à API feitas pelo app. Foram implementadas uma interface **Subject** e outra **Observer** em que os observers (activities e fragments) se registram a um subject (chamadas de API), chamando callbacks nos observers quando são notificados pelo subject. Mais detalhes das classes podem ser conferidas na documentação.
 
 ### Como rodar
 
@@ -53,8 +55,6 @@ Aplicação em node.js + Express que implementa um CRUD para realizar operaçõe
 Foi implementada função de cadastro de categoria (POST) para criar os registros prévios requisitados para o projeto. Cada categoria possui código e descrição
 
 Cada curso possui obrigatoriamente descrição, data de início, data de final e categoria (que tem um model próprio com código e descrição). Opcionalmente pode ser colocado número de alunos.
-
-
 
 ### TODO List
 - [X] Rota GET /categories - Lista categorias existentes
