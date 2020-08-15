@@ -6,13 +6,13 @@ const CourseSchema = mongoose.Schema({
     required: true
   },
   start_date: {
-    type: Date,
-    default: Date.now,
+    type: Number, // Number para usar o padrão UNIX Timestamp
+    default: 1597442400,
     required: true
   },
   end_date: {
-    type: Date,
-    default: Date.now,
+    type: Number,
+    default: 1597442400,
     required: true
   },
   students_per_class: {

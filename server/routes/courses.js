@@ -5,8 +5,27 @@ const {check, validationResult} = require('express-validator');
 const Category = require('../models/Category');
 const Course = require('../models/Course');
 
+
+// Erro caso a data de início seja maior ou igual à de final
+const dateErrors = [
+    {
+        "msg": "A data de início deve ser menor que a data de final.",
+        "param": "start_date",
+        "location": "body"
+    }
+]
+
+// Erro caso já exista um curso cadastrado no intervalo dado
+const intervalErrors = [
+    {
+        "msg": "Já existe um curso cadastrado nesta data.",
+        "param": "start_date",
+        "location": "body"
+    }
+]
+
 // @route   GET    api/courses
-// @desc    Get de cursos podendo filtrar por categoria
+// @desc    Get de cursos. Sem parâmetro retorna todos, com parâmetro category (mandando o ID da categoria) filtra por categoria
 // @access  Public
 router.get('/', async (req, res) => {
     try {
@@ -14,12 +33,7 @@ router.get('/', async (req, res) => {
         const category = req.query.category;
         
         // Cria a query se o parâmetro existir
-        let query;
-        if (category) {
-            query = category;
-        } else {
-            query = {}
-        }
+        let query = category? {'category': category} : {};
 
         // Procura no banco de dados e faz o populate no campo de categoria
         const courses = await Course.find(query).populate('category').sort({start_date: -1});
@@ -53,29 +67,24 @@ async (req, res) => {
 
     console.log(category)
 
-    // Valida se a data de início é menor que a data de final
+    // Valida se a data de início não é maior ou igual à data de final
     if (start_date >= end_date) {
-        // Cria um erro
-        const dateErrors = [
-            {
-                "msg": "A data de início deve ser menor que a data de final.",
-                "param": "start_date",
-                "location": "body"
-            }
-        ]
-
-        // Retorna o erro com status 400
         return res.status(400).json({ errors: dateErrors });
     }
 
+    // Verifica se já não há um curso incluso neste intervalo
+    const course = Course.findOne({
+        $and:[
+            {start_date:{$gte: start_date}},
+            {end_date:{$lte: end_date}}
+        ]
+    })
+    
+    if (course) {
+        return res.status(400).json({ errors: intervalErrors });
+    }
+
     try {
-        // Cria a categoria 
-        // let populatedCategory = await Category.findById(category).populate('category').exec((err, c) => {
-        //     if (err) console.error(err)
-        // });
-
-        //console.log(populatedCategory)
-
         // Cria o novo curso
         const newCourse = new Course({
             description,
@@ -115,6 +124,10 @@ router.put('/:id', async (req, res) => {
 
         if (!course) {
             res.status(404).json({msg: 'Curso não encontrado'});
+        }
+
+        if (start_date && end_date && start_date >= end_date) {
+            return res.status(400).json({ errors: dateErrors });
         }
 
         // Atualiza no banco de dados
