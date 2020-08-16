@@ -5,25 +5,35 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.miguelbrmfreitas.testecastgroup.R;
+import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
 import com.miguelbrmfreitas.testecastgroup.observer.Observer;
+import com.miguelbrmfreitas.testecastgroup.observer.Subject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
 
 import org.jetbrains.annotations.NotNull;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  * Classe da Activity principal, onde o app começa
  */
 public class MainActivity extends AppCompatActivity implements Observer {
+
+    private String TAG = "MainActivity";
+
+    private RepositoryApiServices mRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,11 @@ public class MainActivity extends AppCompatActivity implements Observer {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mRepository = RepositoryApiServices.getInstance(); // Recebe a instância global do repositório da API
+        mRepository.registerObserver(this); // Registra a MainActivity como observer
+
+        mRepository.getCategories(); // Recebe as categorias da API
 
         FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -84,7 +99,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
                 deleteCourse(call, response);
                 break;
             default:
-
                 break;
         }
     }
@@ -95,6 +109,14 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param response  Objeto da resposta
      */
     private void getCategories(@NotNull Call call, @NotNull Response response) {
+        Log.i(TAG, response.message());
+        try {
+            String responseBody = response.body().string();
+            JSONArray jsonArray = new JSONArray(responseBody);
+            Log.i(TAG, responseBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
