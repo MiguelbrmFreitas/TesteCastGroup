@@ -45,7 +45,7 @@ Foi escolhido o padrão de projeto **Observer** para lidar com as chamadas à AP
 
 ### Como rodar
 
-Abra a pasta **TesteCastGroup** da raiz pelo Android Studio como um projeto. Uma vez carregado, ir em **Build -> Make Project** e depois no ícone de **Run**, escolhendo o dispositivo virtual ou físico em que o app será executado.  
+Abra a pasta **TesteCastGroupApp** da raiz pelo Android Studio como um projeto. Uma vez carregado, ir em **Build -> Make Project** e depois no ícone de **Run**, escolhendo o dispositivo virtual ou físico em que o app será executado.  
 
 Para facilitar os testes dispensando configurações adicionais para o rodar o servidor e o banco de dados manualmente, foi feito o deploy da aplicação de backend para o Heroku. Portanto, ao abrir o aplicativo Android ele já estará integrado com uma versão em produção do servidor implementado aqui e acessando o mesmo banco de dados, podendo ver os exemplos que estarão disponibilizados. Mais detalhes na subseção de **deploy** abaixo na descrição do servidor.
 
