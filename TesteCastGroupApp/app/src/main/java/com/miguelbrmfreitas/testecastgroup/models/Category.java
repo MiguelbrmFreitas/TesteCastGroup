@@ -7,10 +7,12 @@ public class Category
 {
     private String mCode;
     private String mDescription;
+    private String mId;
 
-    public Category(String code, String description) {
+    public Category(String code, String description, String id) {
         mDescription = description;
         mCode = code;
+        mId = id;
     }
 
     /**
@@ -27,5 +29,13 @@ public class Category
      */
     public String getCode() {
         return mCode;
+    }
+
+    /**
+     * Getter para o ID
+     * @return      Retorna uma String com o ID
+     */
+    public String getId() {
+        return mId;
     }
 }

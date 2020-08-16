@@ -1,14 +1,17 @@
 package com.miguelbrmfreitas.testecastgroup.activities;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.JsonArray;
 import com.miguelbrmfreitas.testecastgroup.R;
 import com.miguelbrmfreitas.testecastgroup.adapters.CoursesAdapter;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
+import com.miguelbrmfreitas.testecastgroup.models.Category;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
 import com.miguelbrmfreitas.testecastgroup.observer.Observer;
 
@@ -19,6 +22,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
 import okhttp3.Response;
 
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 
@@ -27,6 +33,11 @@ import android.view.MenuItem;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Classe da Activity principal, onde o app começa
@@ -38,8 +49,12 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private RepositoryApiServices mRepository;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    CoursesAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
+    private CoursesAdapter mAdapter;
+    private ArrayList<Course> mCourses = new ArrayList<Course>();
+    private ArrayList<Category> mCategories = new ArrayList<Category>();
+
+    private Handler mHandler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +63,23 @@ public class MainActivity extends AppCompatActivity implements Observer {
         Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
 
+        // Inicializa o Handler para as threads
+        mHandler = new Handler(Looper.getMainLooper());
+
         // Faz o binding da RecyclerView com os cursos
         mRecyclerView = findViewById(R.id.activity_main_recycler_view);
         mRecyclerView.setHasFixedSize(true);
+
+        // Cria e configura o layout manager (com condifurações da disposição do layout da lista)
         mLayoutManager = new LinearLayoutManager(this);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mLayoutManager.setStackFromEnd(false);
+        mLayoutManager.setReverseLayout(false);
+
+        mRecyclerView.setLayoutManager(mLayoutManager); // seta o layout manager
+
+        // Cria o adapter e seta na RecyclerView
+        mAdapter = new CoursesAdapter(this);
+        mRecyclerView.setAdapter(mAdapter);
 
         mRepository = RepositoryApiServices.getInstance(); // Recebe a instância global do repositório da API
         mRepository.registerObserver(this); // Registra a MainActivity como observer
@@ -98,6 +125,93 @@ public class MainActivity extends AppCompatActivity implements Observer {
         mRepository.postCourse(jsonString); // Chama o método POST da API
     }
 
+    /**
+     * Cria um objeto Category a partir de um JSDN Object
+     * @param jsonObject    Objeto JSON
+     * @return      Objeto da model Category
+     */
+    private Category buildCategory(JSONObject jsonObject) {
+        try {
+            // Parsing do objeto JSON
+            String code = jsonObject.getString("code");
+            String description = jsonObject.getString("description");
+            String id = jsonObject.getString("_id");
+
+            return new Category(code, description, id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    /**
+     * Cria um objeto Category a partir de um JSDN Object
+     * @param jsonObject    Objeto JSON
+     * @return      Objeto da model Category
+     */
+    private Course buildCourse(JSONObject jsonObject) {
+        try {
+            // Parsing do objeto JSON
+            long startTimestamp = jsonObject.getLong("start_date");
+            long endTimestamp = jsonObject.getLong("end_date");
+            String description = jsonObject.getString("description");
+            String id = jsonObject.getString("_id");
+            int studentsNumber = jsonObject.has("students_per_class")? jsonObject.getInt("students_per_class") : 0;
+            // Parse composto de category
+            JSONObject categoryJsonObject = jsonObject.getJSONObject("category");
+            Category category = buildCategory(categoryJsonObject);
+
+            return new Course(id, description, new Date((startTimestamp * 1000)), new Date((endTimestamp * 1000)), category, studentsNumber);
+        } catch (JSONException e) {
+            e.printStackTrace();
+
+            return null;
+        }
+    }
+
+    /**
+     * Seta o array de categories
+     * @param jsonArray     JSON Array a fazer o parser
+     */
+    private void setCategories(JSONArray jsonArray) {
+        try {
+            // Faz a iteração pelo JSON Array e cria o array da model Category
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                Category category = buildCategory(jsonObject);
+
+                if (category != null) {
+                    mCategories.add(category);
+                    Log.i(TAG, mCategories.get(i).getDescription());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Seta o array de courses
+     * @param jsonArray     JSON Array a fazer o parser
+     */
+    private void setCourses(JSONArray jsonArray) {
+        try {
+            // Faz a iteração pelo JSON Array e cria o array da model Course
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jsonObject = jsonArray.getJSONObject(i);
+                Course course = buildCourse(jsonObject);
+                if (course != null) {
+                    mCourses.add(course);
+                    Log.i(TAG, mCourses.get(i).getDescription());
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public void onApiServiceFinished(@NotNull Call call, @NotNull Response response, ResponseType responseType) {
         // Chama um método para lidar com cada resposta da API
@@ -131,7 +245,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
         Log.i(TAG, response.message());
         try {
             String responseBody = response.body().string();
-            JSONArray jsonArray = new JSONArray(responseBody);
+            JSONArray jsonArray = new JSONArray(responseBody); // JSON Array de resposta
+            setCategories(jsonArray);
             Log.i(TAG, responseBody);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,8 +265,20 @@ public class MainActivity extends AppCompatActivity implements Observer {
         Log.i(TAG, response.message());
         try {
             String responseBody = response.body().string();
-            JSONArray jsonArray = new JSONArray(responseBody);
+            JSONArray jsonArray = new JSONArray(responseBody); // JSON Array de resposta
             Log.i(TAG, responseBody);
+
+            // Constrói os cursos a partir da resposta do servidor
+            setCourses(jsonArray);
+
+            // Atualiza a UI na thread principal
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mAdapter.setData(mCourses);
+                }
+            });
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -42,7 +42,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
         app:srcCompat="@drawable/baseline_add_white_24"
-        android:backgroundTint="@color/buttonColor"
+        android:backgroundTint="@color/floatingBbuttonColor"
         app:tint="#FFFFFF"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"

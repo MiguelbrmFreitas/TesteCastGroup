@@ -4,4 +4,7 @@
     <color name="colorPrimaryDark">#21224E</color>
     <color name="colorAccent">#03DAC5</color>
     <color name="buttonColor">#CD1F84A3</color>
+    <color name="floatingBbuttonColor">#F48024</color>
+    <color name="cardview_dark_background_custom">#FF424242</color>
+    <color name="cardview_light_background_custom">#D9D9FA</color>
 </resources>

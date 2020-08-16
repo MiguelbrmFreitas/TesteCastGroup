@@ -24,8 +24,8 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
     private ArrayList<Course> mCourses;
     private Context mContext;
 
-    public CoursesAdapter(Context context, ArrayList<Course> courses) {
-        setData(context, courses);
+    public CoursesAdapter(Context context) {
+        mContext = context;
     }
 
     @NonNull
@@ -43,17 +43,17 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
         final CoursesViewHolder coursesViewHolder = holder;
 
         // Cria os conteúdos do TextView
-        String description = mCourses.get(0).getDescription();
-        String dateInterval = getDateIntervalString(mCourses.get(0).getStartDate(), mCourses.get(0).getEndDate());
-        int studentsNumber = mCourses.get(0).getStudentsPerClass();
-        String category = mCourses.get(0).getCategory().getDescription();
+        String description = mCourses.get(position).getDescription();
+        String dateInterval = getDateIntervalString(mCourses.get(position).getStartDate(), mCourses.get(position).getEndDate());
+        int studentsNumber = mCourses.get(position).getStudentsPerClass();
+        String category = mCourses.get(position).getCategory().getDescription();
 
         // Seta os textviews
         coursesViewHolder.mDescription.setText(description);
         coursesViewHolder.mDateInterval.setText(dateInterval);
         coursesViewHolder.mCategory.setText(category);
         if (studentsNumber > 0) {
-            coursesViewHolder.mStudentsNumber.setText(studentsNumber);
+            coursesViewHolder.mStudentsNumber.setText("" + studentsNumber);
         } else {
             coursesViewHolder.mStudentsNumber.setText("N/A");
         }
@@ -105,12 +105,20 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
 
     @Override
     public int getItemCount() {
-        return 0;
+        if (mCourses != null) {
+            return mCourses.size();
+        } else {
+            return 0;
+        }
     }
 
-    public void setData(Context context, ArrayList<Course> courses) {
-        mContext = context;
+    /**
+     * Configura os dados do adapter
+     * @param courses       Array de courses
+     */
+    public void setData( ArrayList<Course> courses) {
         mCourses = courses;
+        notifyDataSetChanged();
     }
 
     /**
@@ -120,8 +128,8 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
      * @return
      */
     private String getDateIntervalString(Date startDate, Date endDate) {
-        String formattedStart = new SimpleDateFormat("DD/MM/YYYY", Locale.getDefault()).format(startDate);
-        String formattedEnd = new SimpleDateFormat("DD/MM/YYYY", Locale.getDefault()).format(startDate);
+        String formattedStart = new SimpleDateFormat("dd/MM/YYYY", Locale.getDefault()).format(startDate);
+        String formattedEnd = new SimpleDateFormat("dd/MM/YYYY", Locale.getDefault()).format(endDate);
 
         return "De " + formattedStart + " a " + formattedEnd;
     }

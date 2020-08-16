@@ -18,8 +18,8 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [X] Criar diagrama de casos de uso
 - [X] Criar estrutura de classes e pacotes
 - [X] Gerar documentação JavaDoc
-- [ ] Conectar com a API feita para este projeto
-- [ ] Mostrar lista de cursos na tela
+- [X] Conectar com a API feita para este projeto
+- [X] Mostrar lista de cursos na tela
 - [ ] Ação de cadastrar curso com descrição, categoria, número de alunos e datas de início e fim
 - [ ] Ação de editar curso
 - [ ] Ação de remover curso
@@ -42,6 +42,9 @@ Então entrando em um pacote e depois em uma respectiva classe ou interface, tem
 
 #### Observer
 Foi escolhido o padrão de projeto **Observer** para lidar com as chamadas à API feitas pelo app. Foram implementadas uma interface **Subject** e outra **Observer** em que os observers (activities e fragments) se registram a um subject (chamadas de API), chamando callbacks nos observers quando são notificados pelo subject. Mais detalhes das classes podem ser conferidas na documentação.
+
+#### Singleton
+Foi utilizado o padrão de projeto **Singleton** também na classe **RepositoryApiServices**, criando uma única instância estática da classe já que ela centraliza todas as chamadas à API da aplicação.
 
 ### Como rodar
 

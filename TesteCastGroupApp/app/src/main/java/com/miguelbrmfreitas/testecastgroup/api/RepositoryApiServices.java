@@ -26,7 +26,8 @@ import okhttp3.Response;
 public class RepositoryApiServices implements Subject
 {
     private static String TAG = "RepositoryApiServices";
-    private String mBaseUrl = "https://teste-cast-group.herokuapp.com/api"; // Endereço base da API
+    // Endereço base da API
+    private String mBaseUrl = "https://teste-cast-group.herokuapp.com/api"; // Trocar para SEU_IP:5001/api se for testar localmente
 
     private ArrayList<Observer> mObservers; // Array de observers inscritos
 
