@@ -4,11 +4,12 @@ import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.gson.Gson;
 import com.miguelbrmfreitas.testecastgroup.R;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
+import com.miguelbrmfreitas.testecastgroup.models.Course;
 import com.miguelbrmfreitas.testecastgroup.observer.Observer;
-import com.miguelbrmfreitas.testecastgroup.observer.Subject;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -23,8 +24,6 @@ import android.view.MenuItem;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Classe da Activity principal, onde o app começa
@@ -79,24 +78,31 @@ public class MainActivity extends AppCompatActivity implements Observer {
         return super.onOptionsItemSelected(item);
     }
 
+    public void postCourse(Course course) {
+        Gson gson = new Gson();
+        String jsonString = gson.toJson(course); // Transforma o objeto de Course em JSON
+
+        mRepository.postCourse(jsonString); // Chama o método POST da API
+    }
+
     @Override
     public void onApiServiceFinished(@NotNull Call call, @NotNull Response response, ResponseType responseType) {
         // Chama um método para lidar com cada resposta da API
         switch(responseType) {
             case GET_CATEGORIES:
-                getCategories(call, response);
+                getCategoriesResponse(call, response);
                 break;
             case GET_COURSES:
-                getCourses(call, response);
+                getCoursesResponse(call, response);
                 break;
             case POST_COURSES:
-                postCourse(call, response);
+                postCourseResponse(call, response);
                 break;
             case PUT_COURSES:
-                putCourse(call, response);
+                putCourseResponse(call, response);
                 break;
             case DELETE_COURSES:
-                deleteCourse(call, response);
+                deleteCourseResponse(call, response);
                 break;
             default:
                 break;
@@ -108,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param call      Objeto de chamada
      * @param response  Objeto da resposta
      */
-    private void getCategories(@NotNull Call call, @NotNull Response response) {
+    private void getCategoriesResponse(@NotNull Call call, @NotNull Response response) {
         Log.i(TAG, response.message());
         try {
             String responseBody = response.body().string();
@@ -118,6 +124,8 @@ public class MainActivity extends AppCompatActivity implements Observer {
             e.printStackTrace();
         }
 
+        // Recebe os cursos depois que já tiver recebido as categorias
+        mRepository.getCourses();
     }
 
     /**
@@ -125,8 +133,15 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param call      Objeto de chamada
      * @param response  Objeto da resposta
      */
-    private void getCourses(@NotNull Call call, @NotNull Response response) {
-
+    private void getCoursesResponse(@NotNull Call call, @NotNull Response response) {
+        Log.i(TAG, response.message());
+        try {
+            String responseBody = response.body().string();
+            JSONArray jsonArray = new JSONArray(responseBody);
+            Log.i(TAG, responseBody);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -134,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param call      Objeto de chamada
      * @param response  Objeto da resposta
      */
-    private void postCourse(@NotNull Call call, @NotNull Response response) {
+    private void postCourseResponse(@NotNull Call call, @NotNull Response response) {
 
     }
 
@@ -143,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param call      Objeto de chamada
      * @param response  Objeto da resposta
      */
-    private void putCourse(@NotNull Call call, @NotNull Response response) {
+    private void putCourseResponse(@NotNull Call call, @NotNull Response response) {
 
     }
 
@@ -152,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param call      Objeto de chamada
      * @param response  Objeto da resposta
      */
-    private void deleteCourse(@NotNull Call call, @NotNull Response response) {
+    private void deleteCourseResponse(@NotNull Call call, @NotNull Response response) {
 
     }
 }

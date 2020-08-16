@@ -160,6 +160,11 @@ router.put('/:id', async (req, res) => {
             return res.status(400).json({ errors: startDateLteError });
         }
 
+        // Verifica se o atributo students_per_class foi inserido e se é menor ou igual a zero
+        if (students_per_class && students_per_class <= 0) {
+            return res.status(400).json({ errors: studentsNumberError });
+        }
+
         // Atualiza no banco de dados
         course = await Course.findByIdAndUpdate({ _id: req.params.id }, courseFields,
             {
