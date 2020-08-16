@@ -6,6 +6,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
 import com.miguelbrmfreitas.testecastgroup.R;
+import com.miguelbrmfreitas.testecastgroup.adapters.CoursesAdapter;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
@@ -13,6 +14,8 @@ import com.miguelbrmfreitas.testecastgroup.observer.Observer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
 import okhttp3.Response;
 
@@ -34,19 +37,29 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
     private RepositoryApiServices mRepository;
 
+    private RecyclerView mRecyclerView;
+    private RecyclerView.LayoutManager mLayoutManager;
+    CoursesAdapter mAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.activity_main_toolbar);
         setSupportActionBar(toolbar);
+
+        // Faz o binding da RecyclerView com os cursos
+        mRecyclerView = findViewById(R.id.activity_main_recycler_view);
+        mRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
 
         mRepository = RepositoryApiServices.getInstance(); // Recebe a instância global do repositório da API
         mRepository.registerObserver(this); // Registra a MainActivity como observer
 
         mRepository.getCategories(); // Recebe as categorias da API
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        FloatingActionButton fab = findViewById(R.id.activity_main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

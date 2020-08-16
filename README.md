@@ -12,7 +12,7 @@ Implementação de uma API para rotas do backend e de conexão com o banco de da
 
 Aplicação Android nativa em Java para se conectar com a API descrita abaixo e mostrar uma lista de cursos de formação da Cast Group na tela e receber inputs do usuário para operações de adicionar, editar, remover e filtrar cursos. 
 
-A aplicação segue boas práticas de desenvolvimento orientado a objetos, engenharia de software, tratamento de erros, usabilidade e UX.
+A aplicação segue boas práticas de desenvolvimento orientado a objetos, engenharia de software, tratamento de erros, usabilidade e UX. O layout é baseado no Material Design.
 
 ### TODO List
 - [X] Criar diagrama de casos de uso
@@ -24,7 +24,7 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [ ] Ação de editar curso
 - [ ] Ação de remover curso
 - [ ] Filtrar cursos por categoria
-- [ ] Usar Material Design para os componentes
+- [X] Usar Material Design para os componentes e ícones
 - [ ] Mostrar alerta de erro para o usuário em caso de ação proibida pelo servidor
 - [X] Aplicação de um ou mais padrões de projeto
 - [ ] Mais funcionalidades a incluir e descrever

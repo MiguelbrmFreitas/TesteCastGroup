@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+ xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:layout_margin="16dp"
+    android:id="@+id/layout_card_view_mcv"
+    app:cardCornerRadius="16dp"
+    app:cardBackgroundColor="#4B81D4FA"
+    android:elevation="4dp"
+    android:translationZ="1dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/layout_card_view_rl"
+        android:padding="16dp"
+        >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/baseline_delete_white_36"
+            android:layout_alignParentEnd="true"
+         />
+
+        <com.google.android.material.button.MaterialButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_edit_button"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentBottom="true"
+            android:text="@string/edit_button_text"
+            android:textAllCaps="false"
+            app:icon="@android:drawable/ic_menu_edit"
+            app:iconGravity="start"
+            app:iconSize="16dp"
+            app:iconTint="#FFFFFF"
+            android:background="@drawable/rounded_button"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_iv_date_interval"
+            android:src="@drawable/baseline_calendar_today_24"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            />
+
+        <!-- Texto hardcoded apenas para mockup. Será substituído pelo conteúdo do adapter        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_tv_date_interval"
+            android:layout_marginTop="2dp"
+            android:text="De 19/08/2020 a 24/08/2020"
+            android:textSize="@dimen/date_text_size"
+            android:layout_toEndOf="@id/layout_card_view_iv_students_number"
+            android:layout_marginStart="8dp"
+            android:layout_alignParentTop="true"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_iv_students_number"
+            android:layout_marginTop="4dp"
+            android:layout_alignParentStart="true"
+            android:src="@drawable/baseline_people_white_24"
+            android:layout_below="@id/layout_card_view_iv_date_interval"
+            />
+
+        <!-- Texto hardcoded apenas para mockup. Será substituído pelo conteúdo do adapter        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_tv_students_number_content"
+            android:layout_marginTop="6dp"
+            android:text="8"
+            android:textSize="@dimen/text_size"
+            android:layout_toEndOf="@id/layout_card_view_iv_students_number"
+            android:layout_marginStart="4dp"
+            android:layout_below="@id/layout_card_view_iv_date_interval"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_tv_description_label"
+            android:text="@string/description"
+            android:textSize="@dimen/label_size"
+            android:textStyle="bold"
+            android:layout_below="@id/layout_card_view_iv_students_number"
+            />
+        <!-- Texto hardcoded apenas para mockup. Será substituído pelo conteúdo do adapter        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_tv_description_content"
+            android:text="Curso de Android com Material Design e RecyclerView"
+            android:textSize="@dimen/text_size"
+            android:layout_marginStart="16dp"
+            android:layout_below="@id/layout_card_view_tv_description_label"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_tv_category_label"
+            android:text="@string/category"
+            android:textSize="@dimen/label_size"
+            android:textStyle="bold"
+            android:layout_alignParentBottom="true"
+            />
+        <!-- Texto hardcoded apenas para mockup. Será substituído pelo conteúdo do adapter        -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_card_view_tv_category_content"
+            android:text="Programação"
+            android:textSize="@dimen/text_size"
+            android:layout_toEndOf="@id/layout_card_view_tv_category_label"
+            android:layout_marginStart="16dp"
+            android:layout_alignParentBottom="true"
+            />
+
+    </RelativeLayout>
+
+
+</com.google.android.material.card.MaterialCardView>
