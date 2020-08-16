@@ -27,7 +27,7 @@ const startDateLteError = [
 // Erro caso já exista um curso cadastrado no intervalo dado
 const intervalErrors = [
     {
-        "msg": "Já existe um curso cadastrado nesta data.",
+        "msg": "Existe(m) curso(s) planejados(s) dentro do período informado.",
         "param": "start_date",
         "location": "body"
     }

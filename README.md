@@ -57,6 +57,15 @@ Foi implementada função de cadastro de categoria (POST) para criar os registro
 
 Cada curso possui obrigatoriamente descrição, data de início, data de final e categoria (que tem um model próprio com código e descrição). Opcionalmente pode ser colocado número de alunos.
 
+### Regras de Negócio
+Não será permitida a inclusão de cursos:
+- 1.	dentro do mesmo período;
+- 2.	com a data de início menor que a data atual;
+- 3.	com a data de final menor ou igual à data de início;
+- 4.	com um número de alunos menor ou igual que zero.
+
+Em todos esses casos, o servidor retornará com STATUS 400 e uma mensagem descrevendo o erro.
+
 ### TODO List
 - [X] Rota GET /categories - Lista categorias existentes
 - [X] Rota POST /categories - Cadastrar categoria
