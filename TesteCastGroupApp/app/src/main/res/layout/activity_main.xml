@@ -31,21 +31,21 @@
         android:layout_centerInParent="true"
         android:padding="16dp"
         android:layout_below="@id/activity_main_app_bar"
+
         >
 
     </androidx.recyclerview.widget.RecyclerView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <com.miguelbrmfreitas.testecastgroup.components.CustomButton
         android:id="@+id/activity_main_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/baseline_add_white_24"
-        android:backgroundTint="@color/floatingBbuttonColor"
-        app:tint="#FFFFFF"
+        app:has_icon="true"
+        app:button_background="@drawable/background_primary_button"
+        app:button_text="@string/add_course_button_text"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/fab_margin"
         />
 
 </RelativeLayout>

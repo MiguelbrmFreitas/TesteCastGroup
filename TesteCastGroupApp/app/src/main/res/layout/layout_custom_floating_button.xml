@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:id="@+id/custom_floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:background="@drawable/background_primary_button"
+        android:visibility="visible">
+
+        <ProgressBar
+            android:id="@+id/loading_icon"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:indeterminateTint="@color/colorPrimary"
+            android:indeterminateTintMode="src_in"
+            android:visibility="gone"/>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+            <ImageView
+                android:id="@+id/button_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_input_add"
+                app:tint="@color/colorPrimary"
+                android:layout_centerVertical="true"
+                android:visibility="visible"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginStart="16dp"
+            />
+
+            <TextView
+                android:id="@+id/button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="@string/add_course_button_text"
+                android:textAlignment="center"
+                android:textColor="@color/colorPrimary"
+                android:textSize="@dimen/text_size"
+                android:layout_centerInParent="true"
+                android:layout_toEndOf="@+id/button_icon"
+                android:visibility="visible"
+                android:padding="16dp"
+                android:layout_marginEnd="32dp"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

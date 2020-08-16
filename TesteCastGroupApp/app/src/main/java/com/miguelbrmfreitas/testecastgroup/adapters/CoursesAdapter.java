@@ -19,8 +19,11 @@ import java.util.Locale;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesViewHolder>
+public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
+    private static int FOOTER_TYPE = 1;
+    private static int ITEM_TYPE = 2;
+
     private ArrayList<Course> mCourses;
     private Context mContext;
 
@@ -30,49 +33,57 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
 
     @NonNull
     @Override
-    public CoursesViewHolder onCreateViewHolder(ViewGroup parent,
-                                                  int viewType) {
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.layout_card_view, parent, false);
-
-        return new CoursesViewHolder(view);
+        View view;
+        // Verifica o tipo da View para colocar o footer se necessário
+        if (viewType == FOOTER_TYPE) {
+            view = inflater.inflate(R.layout.dummy_footer, parent, false);
+            return new FooterViewHolder(view);
+        } else {
+            view = inflater.inflate(R.layout.layout_card_view, parent, false);
+            return new CoursesViewHolder(view); // Caso contrário retorna o view holder para courses
+        }
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CoursesViewHolder holder, int position) {
-        final CoursesViewHolder coursesViewHolder = holder;
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        // Verifica se é o viewholder certo
+        if (holder instanceof CoursesViewHolder) {
+            final CoursesViewHolder coursesViewHolder = (CoursesViewHolder) holder;
 
-        // Cria os conteúdos do TextView
-        String description = mCourses.get(position).getDescription();
-        String dateInterval = getDateIntervalString(mCourses.get(position).getStartDate(), mCourses.get(position).getEndDate());
-        int studentsNumber = mCourses.get(position).getStudentsPerClass();
-        String category = mCourses.get(position).getCategory().getDescription();
+            // Cria os conteúdos do TextView
+            String description = mCourses.get(position).getDescription();
+            String dateInterval = getDateIntervalString(mCourses.get(position).getStartDate(), mCourses.get(position).getEndDate());
+            int studentsNumber = mCourses.get(position).getStudentsPerClass();
+            String category = mCourses.get(position).getCategory().getDescription();
 
-        // Seta os textviews
-        coursesViewHolder.mDescription.setText(description);
-        coursesViewHolder.mDateInterval.setText(dateInterval);
-        coursesViewHolder.mCategory.setText(category);
-        if (studentsNumber > 0) {
-            coursesViewHolder.mStudentsNumber.setText("" + studentsNumber);
-        } else {
-            coursesViewHolder.mStudentsNumber.setText("N/A");
+            // Seta os textviews
+            coursesViewHolder.mDescription.setText(description);
+            coursesViewHolder.mDateInterval.setText(dateInterval);
+            coursesViewHolder.mCategory.setText(category);
+            if (studentsNumber > 0) {
+                coursesViewHolder.mStudentsNumber.setText("" + studentsNumber);
+            } else {
+                coursesViewHolder.mStudentsNumber.setText("N/A");
+            }
+
+            // Listener para o edit button
+            coursesViewHolder.mEditButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // TODO: Ir para Activity de edição
+                }
+            });
+
+            // Listener para o delete button
+            coursesViewHolder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //TODO: chamar rota /delete da API
+                }
+            });
         }
-
-        // Listener para o edit button
-        coursesViewHolder.mEditButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // TODO: Ir para Activity de edição
-            }
-        });
-
-        // Listener para o delete button
-        coursesViewHolder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //TODO: chamar rota /delete da API
-            }
-        });
     }
 
     /**
@@ -102,13 +113,30 @@ public class CoursesAdapter extends RecyclerView.Adapter<CoursesAdapter.CoursesV
         }
     }
 
+    /**
+     * Classe com o view holder para o footer
+     */
+    static class FooterViewHolder extends RecyclerView.ViewHolder {
+        public FooterViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
 
     @Override
     public int getItemCount() {
         if (mCourses != null) {
-            return mCourses.size();
+            return mCourses.size() + 1; // Tamanho extra para o footer
         } else {
             return 0;
+        }
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        if (mCourses != null && position == mCourses.size()) {
+            return FOOTER_TYPE;
+        } else {
+            return ITEM_TYPE;
         }
     }
 

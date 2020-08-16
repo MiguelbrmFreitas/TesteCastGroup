@@ -7,4 +7,5 @@
     <color name="floatingBbuttonColor">#F48024</color>
     <color name="cardview_dark_background_custom">#FF424242</color>
     <color name="cardview_light_background_custom">#D9D9FA</color>
+    <color name="success_color">#21bc76</color>
 </resources>

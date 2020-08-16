@@ -11,6 +11,7 @@ import com.miguelbrmfreitas.testecastgroup.R;
 import com.miguelbrmfreitas.testecastgroup.adapters.CoursesAdapter;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
+import com.miguelbrmfreitas.testecastgroup.components.CustomButton;
 import com.miguelbrmfreitas.testecastgroup.models.Category;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
 import com.miguelbrmfreitas.testecastgroup.observer.Observer;
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         // Faz o binding da RecyclerView com os cursos
         mRecyclerView = findViewById(R.id.activity_main_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
 
         // Cria e configura o layout manager (com condifurações da disposição do layout da lista)
         mLayoutManager = new LinearLayoutManager(this);
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements Observer {
 
         mRepository.getCategories(); // Recebe as categorias da API
 
-        FloatingActionButton fab = findViewById(R.id.activity_main_fab);
+        CustomButton fab = findViewById(R.id.activity_main_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

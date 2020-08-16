@@ -17,4 +17,6 @@
     <string name="students_number">Número de alunos: </string>
     <string name="edit_button_text">Editar</string>
 
+    <string name="add_course_button_text">Adicionar</string>
+
 </resources>
