@@ -36,16 +36,11 @@
         android:layout_margin="@dimen/fab_margin"
         />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/activity_course_details_app_bar"
-        >
-
         <RelativeLayout
             android:id="@+id/activity_course_details_relative_layout"
             android:layout_width="wrap_content" android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:layout_below="@id/activity_course_details_app_bar"
             >
 
             <TextView
@@ -169,6 +164,4 @@
                 />
 
         </RelativeLayout>
-
-    </ScrollView>
 </RelativeLayout>

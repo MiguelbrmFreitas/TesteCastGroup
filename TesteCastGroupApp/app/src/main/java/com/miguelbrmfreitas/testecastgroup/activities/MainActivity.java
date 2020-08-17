@@ -4,13 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.miguelbrmfreitas.testecastgroup.R;
 import com.miguelbrmfreitas.testecastgroup.adapters.CoursesAdapter;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
 import com.miguelbrmfreitas.testecastgroup.components.CustomButton;
+import com.miguelbrmfreitas.testecastgroup.components.ToastMaker;
 import com.miguelbrmfreitas.testecastgroup.fragments.DeleteDialogFragment;
 import com.miguelbrmfreitas.testecastgroup.models.Category;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
@@ -39,15 +40,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Classe da Activity principal, onde o app começa
  */
-public class MainActivity extends AppCompatActivity implements Observer, DeleteDialogFragment.DeleteDialogListener {
+public class MainActivity extends AppCompatActivity implements Observer, DeleteDialogFragment.DeleteDialogListener, CourseDetailsActivity.CourseSubmittedListener {
 
     private String TAG = "MainActivity";
+
+    public static final String KEY_EXTRA = "MAIN_ACTIVITY";
 
     private RepositoryApiServices mRepository;
 
@@ -60,6 +64,7 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     private Handler mHandler;
 
     private final Context mContext = this;
+    private final CourseDetailsActivity.CourseSubmittedListener mCourseSubmittedListener = this;
 
     private int mCurrentPosition = -1;
 
@@ -108,8 +113,9 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 // Configura os dados a serem passados para a Activity
                 Bundle bundle = new Bundle();
 
-                bundle.putStringArray("categories_array", getCategoriesArray());
                 bundle.putBoolean("is_editing", false);
+
+                CourseDetailsActivity.setInitialConfig(mCourseSubmittedListener, mCategories);
 
                 intent.putExtra(CourseDetailsActivity.KEY_EXTRA, bundle);
                 startActivity(intent);
@@ -140,21 +146,26 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     }
 
     public void postCourse(Course course) {
-        Gson gson = new Gson();
-        String jsonString = gson.toJson(course); // Transforma o objeto de Course em JSON
+        // Gson gson = new Gson();
 
-        mRepository.postCourse(jsonString); // Chama o método POST da API
-    }
+        JSONObject jsonObject = new JSONObject();
+        JSONObject categoryJson = new JSONObject();
+        try {
+            // Cria os campos para enviar no POST
+            jsonObject.put("description", course.getDescription());
+            jsonObject.put("start_date", (course.getStartDate().getTime() * 1000) );
+            jsonObject.put("end_date", (course.getEndDate().getTime() * 1000) );
+            jsonObject.put("students_per_class", course.getStudentsPerClass());
+            categoryJson.put("_id", course.getCategory().getId());
+            jsonObject.put("category", categoryJson);
 
-    private String[] getCategoriesArray() {
-        if (mCategories != null) {
-            String[] categoriesArray = new String[mCategories.size()];
-            for (int i = 0; i < mCategories.size(); i++) {
-                categoriesArray[i] = mCategories.get(i).getDescription();
-            }
-            return categoriesArray;
-        } else {
-            return null;
+            String jsonString = jsonObject.toString(); // Transforma o objeto de Course em JSON String
+
+            Log.i(TAG, jsonString);
+
+            mRepository.postCourse(jsonString); // Chama o método POST da API
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -195,7 +206,10 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
             JSONObject categoryJsonObject = jsonObject.getJSONObject("category");
             Category category = buildCategory(categoryJsonObject);
 
-            return new Course(id, description, new Date((startTimestamp * 1000)), new Date((endTimestamp * 1000)), category, studentsNumber);
+            Course course = new Course(description, new Date((startTimestamp * 1000)), new Date((endTimestamp * 1000)), category, studentsNumber);
+            course.setId(id);
+
+            return course;
         } catch (JSONException e) {
             e.printStackTrace();
 
@@ -250,10 +264,14 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         // Chama um método para lidar com cada resposta da API
         switch(responseType) {
             case GET_CATEGORIES:
-                getCategoriesResponse(call, response);
+                if (mCategories.isEmpty()) {
+                    getCategoriesResponse(call, response);
+                }
                 break;
             case GET_COURSES:
-                getCoursesResponse(call, response);
+                if (mCourses.isEmpty()) {
+                    getCoursesResponse(call, response);
+                }
                 break;
             case POST_COURSES:
                 postCourseResponse(call, response);
@@ -325,7 +343,41 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      * @param response  Objeto da resposta
      */
     private void postCourseResponse(@NotNull Call call, @NotNull Response response) {
+        try {
+            if (response.isSuccessful()) {
+                // Avisa o resultado de sucesso na tela
+                ToastMaker.showToast(this, getString(R.string.post_success));
+            } else {
+                // Pega os erros
+                Log.i(TAG, "Deu treta");
+                String responseBody = response.body().string();
+                JSONObject responseJson = new JSONObject(responseBody); // JSON Object da resposta
+                JSONArray jsonArray = responseJson.getJSONArray("errors"); // JSON Array de resposta
+                Log.i(TAG, responseBody);
+                String[] errorsArray = new String[jsonArray.length()];
+                // Pega todas as mensagens de erro
+                for(int k = 0; k < jsonArray.length(); k++) {
+                    errorsArray[k] = jsonArray.getJSONObject(k).getString("msg");
+                    ToastMaker.showToast(this, errorsArray[k]);
+                }
 
+//                Intent intent = new Intent(mContext, CourseDetailsActivity.class);
+//
+//                // Configura os dados a serem passados para a Activity
+//                Bundle bundle = new Bundle();
+//
+//                bundle.putStringArray("errors", errorsArray);
+//
+////                CourseDetailsActivity.setInitialConfig(mCourseSubmittedListener, mCategories);
+//
+//                intent.putExtra(CourseDetailsActivity.KEY_EXTRA, bundle);
+//                startActivity(intent);
+//                finish();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i(TAG, response.message());
     }
 
     /**
@@ -372,5 +424,11 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
             // Chama a rota de delete
             mRepository.deleteCourse(courseId);
         }
+    }
+
+    @Override
+    public void onSubmit(Course newCourse) {
+        Log.i(TAG, newCourse.getDescription());
+        postCourse(newCourse);
     }
 }

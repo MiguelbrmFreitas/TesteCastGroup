@@ -7,7 +7,7 @@ import java.util.Date;
  */
 public class Course
 {
-    private String mId;
+    private String _id;
     private String mDescription;
     private Date mStartDate;
     private Date mEndDate;
@@ -22,8 +22,8 @@ public class Course
      * @param endDate           Data de final
      * @param category          Categoria do curso
      */
-    public Course(String id, String description, Date startDate, Date endDate, Category category) {
-        this(id, description, startDate, endDate, category, 0);
+    public Course( String description, Date startDate, Date endDate, Category category) {
+        this(description, startDate, endDate, category, 0);
     }
 
     /**
@@ -34,13 +34,12 @@ public class Course
      * @param category          Categoria do curso
      * @param studentsPerClass  Número de alunos
      */
-    public Course(String id, String description, Date startDate, Date endDate, Category category, int studentsPerClass) {
+    public Course(String description, Date startDate, Date endDate, Category category, int studentsPerClass) {
         mDescription = description;
         mStartDate = startDate;
         mEndDate = endDate;
         mCategory = category;
         mStudentsPerClass = studentsPerClass;
-        mId = id;
     }
 
     /**
@@ -48,7 +47,14 @@ public class Course
      * @return      Retorna uma String com o ID
      */
     public String getId() {
-        return mId;
+        return _id;
+    }
+
+    /**
+     * Setter para o ID
+     */
+    public void setId(String mId) {
+        this._id = mId;
     }
 
     /**

@@ -20,7 +20,7 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [X] Gerar documentação JavaDoc
 - [X] Conectar com a API feita para este projeto
 - [X] Mostrar lista de cursos na tela
-- [ ] Ação de cadastrar curso com descrição, categoria, número de alunos e datas de início e fim
+- [X] Ação de cadastrar curso com descrição, categoria, número de alunos e datas de início e fim
 - [ ] Ação de editar curso
 - [X] Ação de remover curso
 - [ ] Filtrar cursos por categoria

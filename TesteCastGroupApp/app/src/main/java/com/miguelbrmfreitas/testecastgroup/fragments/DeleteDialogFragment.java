@@ -1,5 +1,6 @@
 package com.miguelbrmfreitas.testecastgroup.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.EditText;
 
 import com.google.android.material.button.MaterialButton;
 import com.miguelbrmfreitas.testecastgroup.R;
+import com.miguelbrmfreitas.testecastgroup.components.ToastMaker;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
@@ -18,7 +20,6 @@ import androidx.fragment.app.DialogFragment;
  */
 public class DeleteDialogFragment extends DialogFragment
 {
-    private EditText mEditText;
     private MaterialButton mConfirmationButton;
     private MaterialButton mCancelButton;
 
@@ -81,6 +82,7 @@ public class DeleteDialogFragment extends DialogFragment
             public void onClick(View view) {
                 DeleteDialogListener deleteDialogListener = (DeleteDialogListener) getActivity(); // Cria o objeto do listener
                 deleteDialogListener.deleteCourse(mCourseId, true); // Manda deletar
+                ToastMaker.showToast(getContext().getApplicationContext(), getString(R.string.delete_success));
                 dismiss();
             }
         });

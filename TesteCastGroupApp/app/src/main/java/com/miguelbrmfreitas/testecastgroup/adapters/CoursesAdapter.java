@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.miguelbrmfreitas.testecastgroup.R;
+import com.miguelbrmfreitas.testecastgroup.activities.CourseDetailsActivity;
 import com.miguelbrmfreitas.testecastgroup.activities.MainActivity;
 import com.miguelbrmfreitas.testecastgroup.fragments.DeleteDialogFragment;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
@@ -91,7 +92,6 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             });
         }
     }
-
 
 
     /**

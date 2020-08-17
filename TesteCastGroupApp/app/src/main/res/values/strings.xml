@@ -27,4 +27,13 @@
 
     <string name="description_placeholder">Insira uma descrição entre 6 e 140 caracteres</string>
     <string name="students_number_placeholder">Insira um número inteiro maior que 0</string>
+
+    <string name="description_validation">A descrição precisa ter entre 6 e 140 caracteres!</string>
+    <string name="date_compare_validation">A data final precisa ser maior do que a inicial!</string>
+    <string name="date_current_validation">A data inicial precisa ser maior do que a atual!</string>
+    <string name="delete_success">Curso deletado!</string>
+    <string name="post_success">Curso adicionado!</string>
+    <string name="put_success">Curso editado!</string>
+    <string name="students_validation">O número de alunos deve ser 1 ou mais!</string>
+    <string name="parsing_error">Erro no formato da data!</string>
 </resources>
