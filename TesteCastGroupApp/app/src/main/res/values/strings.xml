@@ -20,7 +20,9 @@
     <string name="add_course_button_text">Adicionar</string>
 
     <string name="delete_warning">Tem certeza que deseja deletar este curso?</string>
+    <string name="search_dialog">Escolha a categoria pela qual deseja filtrar</string>
     <string name="confirmation">Sim</string>
+    <string name="search_text">Pesquisar</string>
     <string name="cancel">Cancelar</string>
 
     <string name="submit">Submeter</string>

@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                     @Override
                     public void run() {
                         // Avisa o resultado de sucesso na tela
-                        ToastMaker.showToast(mContext, getString(R.string.post_success));
+                        ToastMaker.showToast(mContext, getString(R.string.put_success));
                     }
                 });
             } else {
