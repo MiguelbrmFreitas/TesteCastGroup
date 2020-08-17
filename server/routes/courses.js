@@ -42,6 +42,16 @@ const studentsNumberError = [
     }
 ]
 
+// Recebe os timestamps, transforma em data e vê se é no mesmo dia
+const sameDay = (t1, t2) => {
+    const date1 = new Date(t1*1000);
+    const date2 = new Date(t2*1000);
+
+    return date1.getFullYear() === date2.getFullYear() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getDate() === date2.getDate();
+    }
+
 // @route   GET    api/courses
 // @desc    Get de cursos. Sem parâmetro retorna todos, com parâmetro category (mandando o ID da categoria) filtra por categoria
 // @access  Public
@@ -54,7 +64,7 @@ router.get('/', async (req, res) => {
         let query = category? {'category': category} : {};
 
         // Procura no banco de dados e faz o populate no campo de categoria
-        const courses = await Course.find(query).populate('category').sort({start_date: -1});
+        const courses = await Course.find(query).populate('category').sort({start_date: 1});
 
         // Retorna os cursos encontrados
         res.json(courses);
@@ -88,11 +98,12 @@ async (req, res) => {
 
     console.log(category)
 
+    const today = Math.floor(Date.now() / 1000);
+
     // Valida se a data de início não é maior ou igual à data de final
     if (start_date >= end_date) {
         return res.status(400).json({ errors: startDateGteError });
-    } else if (start_date < ( Math.floor(Date.now() / 1000)) ) { // Verifica se a data de início é maior do que a data atual
-        console.log(( Math.floor(Date.now() / 1000)), start_date )
+    } else if (start_date < today && !sameDay(start_date, today)) { // Verifica se a data de início é maior do que a data atual e se não é no mesmo dia
         return res.status(400).json({ errors: startDateLteError });
     }
 
@@ -156,10 +167,11 @@ router.put('/:id', async (req, res) => {
             res.status(404).json({msg: 'Curso não encontrado'});
         }
 
+        const today = Math.floor(Date.now() / 1000);
         // Verifica se datas de início e final existem e se a data de início é maior ou igual à data de final
         if (start_date && end_date && start_date >= end_date) {
             return res.status(400).json({ errors: startDateGteError });
-        } else if (start_date < Date.now()) { // Verifica se a data de início é maior do que a data atual
+        } else if (start_date < today && !sameDay(start_date, today)) { // Verifica se a data de início é maior do que a data atual
             return res.status(400).json({ errors: startDateLteError });
         }
 

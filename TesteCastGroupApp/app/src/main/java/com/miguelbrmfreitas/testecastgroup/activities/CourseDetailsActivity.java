@@ -283,6 +283,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
             String description = mEditTextDescription.getText().toString();
             Date startDate = stringToDate(mStartDatePicker.getText().toString());
             Date endDate = stringToDate(mEndDatePicker.getText().toString());
+            Log.i(TAG, startDate.toString());
             int studentsNumber = Integer.parseInt(mStudentsPicker.getText().toString());
             int index = mCategoryPicker.getValue() - 1;
             Category category = mCategories.get(index);

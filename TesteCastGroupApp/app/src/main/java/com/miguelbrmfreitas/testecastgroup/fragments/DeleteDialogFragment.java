@@ -82,7 +82,6 @@ public class DeleteDialogFragment extends DialogFragment
             public void onClick(View view) {
                 DeleteDialogListener deleteDialogListener = (DeleteDialogListener) getActivity(); // Cria o objeto do listener
                 deleteDialogListener.deleteCourse(mCourseId, true); // Manda deletar
-                ToastMaker.showToast(getContext().getApplicationContext(), getString(R.string.delete_success));
                 dismiss();
             }
         });

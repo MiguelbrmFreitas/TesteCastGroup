@@ -153,8 +153,8 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         try {
             // Cria os campos para enviar no POST
             jsonObject.put("description", course.getDescription());
-            jsonObject.put("start_date", (course.getStartDate().getTime() * 1000) );
-            jsonObject.put("end_date", (course.getEndDate().getTime() * 1000) );
+            jsonObject.put("start_date", (course.getStartDate().getTime())/1000);
+            jsonObject.put("end_date", (course.getEndDate().getTime())/1000);
             jsonObject.put("students_per_class", course.getStudentsPerClass());
             categoryJson.put("_id", course.getCategory().getId());
             jsonObject.put("category", categoryJson);
@@ -401,7 +401,7 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 public void run() {
                     mCourses.remove(mCurrentPosition); // Remove
                     mAdapter.setData(mCourses);
-                    Toast.makeText(mContext, "Curso deletado", Toast.LENGTH_LONG).show();
+                    ToastMaker.showToast(mContext, getString(R.string.delete_success));
                 }
             });
         }
