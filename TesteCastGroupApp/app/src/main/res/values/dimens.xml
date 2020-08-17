@@ -8,4 +8,6 @@
     <dimen name="dialog_button_margin">8dp</dimen>
     <dimen name="dialog_delete_button_width">130dp</dimen>
     <dimen name="edit_text_width">160dp</dimen>
+    <dimen name="edit_text_padding_top">4dp</dimen>
+    <dimen name="margin_top_fields">16dp</dimen>
 </resources>

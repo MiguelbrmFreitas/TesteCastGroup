@@ -24,4 +24,7 @@
     <string name="cancel">Cancelar</string>
 
     <string name="submit">Submeter</string>
+
+    <string name="description_placeholder">Insira uma descrição entre 6 e 140 caracteres</string>
+    <string name="students_number_placeholder">Insira um número inteiro maior que 0</string>
 </resources>
