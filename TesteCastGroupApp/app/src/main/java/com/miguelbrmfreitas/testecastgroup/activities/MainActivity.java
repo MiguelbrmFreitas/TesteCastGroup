@@ -1,23 +1,23 @@
 package com.miguelbrmfreitas.testecastgroup.activities;
 
-import android.graphics.drawable.Drawable;
+import android.content.Context;
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.miguelbrmfreitas.testecastgroup.R;
 import com.miguelbrmfreitas.testecastgroup.adapters.CoursesAdapter;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
 import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
 import com.miguelbrmfreitas.testecastgroup.components.CustomButton;
+import com.miguelbrmfreitas.testecastgroup.fragments.DeleteDialogFragment;
 import com.miguelbrmfreitas.testecastgroup.models.Category;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
 import com.miguelbrmfreitas.testecastgroup.observer.Observer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
@@ -25,12 +25,12 @@ import okhttp3.Response;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -43,7 +43,7 @@ import java.util.Date;
 /**
  * Classe da Activity principal, onde o app começa
  */
-public class MainActivity extends AppCompatActivity implements Observer {
+public class MainActivity extends AppCompatActivity implements Observer, DeleteDialogFragment.DeleteDialogListener {
 
     private String TAG = "MainActivity";
 
@@ -56,6 +56,10 @@ public class MainActivity extends AppCompatActivity implements Observer {
     private ArrayList<Category> mCategories = new ArrayList<Category>();
 
     private Handler mHandler;
+
+    private final Context mContext = this;
+
+    private int mCurrentPosition = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -308,6 +312,34 @@ public class MainActivity extends AppCompatActivity implements Observer {
      * @param response  Objeto da resposta
      */
     private void deleteCourseResponse(@NotNull Call call, @NotNull Response response) {
+        if (response.isSuccessful()) {
+            mHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    mCourses.remove(mCurrentPosition); // Remove
+                    mAdapter.setData(mCourses);
+                    Toast.makeText(mContext, "Curso deletado", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
 
+    /**
+     * Mostra o fragment de deletar curso
+     * @param courseId      ID do curso
+     */
+    public void showDeleteDialog(String courseId, int position) {
+        mCurrentPosition = position;
+        FragmentManager fm = getSupportFragmentManager();
+        DeleteDialogFragment deleteDialogFragment = DeleteDialogFragment.newInstance(courseId);
+        deleteDialogFragment.show(fm, "fragment_delete_dialog");
+    }
+
+    @Override
+    public void deleteCourse(String courseId, boolean delete) {
+        if (delete) {
+            // Chama a rota de delete
+            mRepository.deleteCourse(courseId);
+        }
     }
 }

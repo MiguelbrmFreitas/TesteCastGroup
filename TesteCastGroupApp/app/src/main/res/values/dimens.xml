@@ -4,4 +4,6 @@
     <dimen name="text_size">16sp</dimen>
     <dimen name="date_text_size">14sp</dimen>
     <dimen name="custom_button_height">56dp</dimen>
+    <dimen name="dialog_button_margin">8dp</dimen>
+    <dimen name="dialog_delete_button_width">130dp</dimen>
 </resources>

@@ -19,4 +19,8 @@
 
     <string name="add_course_button_text">Adicionar</string>
 
+    <string name="delete_warning">Tem certeza que deseja deletar este curso?</string>
+    <string name="confirmation">Sim</string>
+    <string name="cancel">Cancelar</string>
+
 </resources>

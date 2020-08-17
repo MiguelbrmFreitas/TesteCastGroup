@@ -9,6 +9,8 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.miguelbrmfreitas.testecastgroup.R;
+import com.miguelbrmfreitas.testecastgroup.activities.MainActivity;
+import com.miguelbrmfreitas.testecastgroup.fragments.DeleteDialogFragment;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
 
 import java.text.SimpleDateFormat;
@@ -17,6 +19,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
@@ -47,7 +50,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
         // Verifica se é o viewholder certo
         if (holder instanceof CoursesViewHolder) {
             final CoursesViewHolder coursesViewHolder = (CoursesViewHolder) holder;
@@ -80,11 +83,16 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             coursesViewHolder.mDeleteImageButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    //TODO: chamar rota /delete da API
+                   if (mContext instanceof MainActivity) {
+                       String courseId = mCourses.get(position).getId();
+                       ((MainActivity) mContext).showDeleteDialog(courseId, position);
+                   }
                 }
             });
         }
     }
+
+
 
     /**
      * Classe para definir o view holder com o layout de cada item do adapter
