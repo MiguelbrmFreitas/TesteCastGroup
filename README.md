@@ -68,7 +68,9 @@ Não será permitida a inclusão de cursos:
 - 1.	dentro do mesmo período;
 - 2.	com a data de início menor que a data atual;
 - 3.	com a data de final menor ou igual à data de início;
-- 4.	com um número de alunos menor ou igual que zero.
+- 4.	com um número de alunos menor ou igual que zero;
+- 5.    com descrição menor que 6 caracteres;
+- 6.    com descrição maior que 140 caracteres.
 
 Em todos esses casos, o servidor retornará com STATUS 400 e uma mensagem descrevendo o erro.
 
@@ -84,6 +86,7 @@ Em todos esses casos, o servidor retornará com STATUS 400 e uma mensagem descre
 - [X] Validar e não permitir que um curso seja incluído no mesmo período que outro 
 - [X] Validar se o número de estudantes (caso exista) é maior ou igual a um
 - [X] Validar se o curso não está sendo registrado com a data de início anterior à data atual
+- [X] Validar se o a descrição tem no mínimo 6 e no máximo 140 caracteres
 
 ### Como usar
 

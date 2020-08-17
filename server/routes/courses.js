@@ -69,7 +69,10 @@ router.get('/', async (req, res) => {
 // @access  Public
 router.post('/', [
     [
-        check('description', 'É necessário colocar uma descrição').not().isEmpty(),
+        check('description', 'É necessário colocar uma descrição de no mínimo 6 e no máximo 140 caracteres').not().isEmpty().isLength({
+            min: 6,
+            max: 140
+        }),
         check('start_date', 'É necessário colocar uma data de início').not().isEmpty(),
         check('end_date', 'É necessário colocar uma data de final').not().isEmpty(),
         check('category', 'É necessário colocar uma categoria').not().isEmpty(),
