@@ -72,8 +72,19 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_course_details);
         Toolbar toolbar = findViewById(R.id.activity_course_details_toolbar);
+
+        //Configurando a toolbar
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Coloca o botão de voltar
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+
+        // Listener para voltar a tela anterior quando clicar no botão de voltar em cima
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
 
         // Faz binding dos componentes
         mStartDatePicker = findViewById(R.id.fragment_course_details_start_date_picker);

@@ -103,6 +103,22 @@ public class RepositoryApiServices implements Subject
     }
 
     /**
+     * Faz uma chamada GET com um query parameter para filtrar por categoria
+     * @param categoryId        ID da categoria usada no filtro
+     */
+    public void filterCourses(String categoryId) {
+        String url = mBaseUrl + "/courses?category=" + categoryId;
+
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        makeRequest(request, client, ResponseType.FILTER_COURSES);
+    }
+
+    /**
      * Envia um request POST para /courses para cadastrar um novo curso
      * @param jsonString        String do objeto JSON a ser mandado no body da request
      */

@@ -128,8 +128,10 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
+        // Ação de filtrar
         if (id == R.id.action_settings) {
+            ToastMaker.showToast(mContext, "e aeeeeee");
+
             return true;
         }
 
@@ -142,7 +144,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      */
     public void postCourse(Course course) {
         JSONObject jsonObject = new JSONObject();
-        JSONObject categoryJson = new JSONObject();
         try {
             // Cria os campos para enviar no POST
             jsonObject.put("description", course.getDescription());
