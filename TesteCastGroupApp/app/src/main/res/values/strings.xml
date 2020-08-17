@@ -14,7 +14,7 @@
     <string name="start_date">Início: </string>
     <string name="end_date">Final: </string>
     <string name="category">Categoria: </string>
-    <string name="students_number">Número de alunos: </string>
+    <string name="students_number">Número de alunos (opcional): </string>
     <string name="edit_button_text">Editar</string>
 
     <string name="add_course_button_text">Adicionar</string>
@@ -23,4 +23,5 @@
     <string name="confirmation">Sim</string>
     <string name="cancel">Cancelar</string>
 
+    <string name="submit">Submeter</string>
 </resources>

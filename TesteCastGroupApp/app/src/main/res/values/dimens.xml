@@ -2,8 +2,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="label_size">16sp</dimen>
     <dimen name="text_size">16sp</dimen>
+    <string name="label_course_size">20sp</string>
     <dimen name="date_text_size">14sp</dimen>
     <dimen name="custom_button_height">56dp</dimen>
     <dimen name="dialog_button_margin">8dp</dimen>
     <dimen name="dialog_delete_button_width">130dp</dimen>
+    <dimen name="edit_text_width">160dp</dimen>
 </resources>

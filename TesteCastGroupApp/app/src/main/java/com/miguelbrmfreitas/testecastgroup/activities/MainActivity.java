@@ -1,6 +1,7 @@
 package com.miguelbrmfreitas.testecastgroup.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -61,6 +62,7 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
     private int mCurrentPosition = -1;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,8 +96,17 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // Cria intent para trocar de Activity
+                Intent intent = new Intent(mContext, CourseDetailsActivity.class);
+
+                // Configura os dados a serem passados para a Activity
+                Bundle bundle = new Bundle();
+
+                bundle.putStringArray("categories_array", getCategoriesArray());
+                bundle.putBoolean("is_editing", false);
+
+                intent.putExtra(CourseDetailsActivity.KEY_EXTRA, bundle);
+                startActivity(intent);
             }
         });
     }
@@ -127,6 +138,18 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         String jsonString = gson.toJson(course); // Transforma o objeto de Course em JSON
 
         mRepository.postCourse(jsonString); // Chama o método POST da API
+    }
+
+    private String[] getCategoriesArray() {
+        if (mCategories != null) {
+            String[] categoriesArray = new String[mCategories.size()];
+            for (int i = 0; i < mCategories.size(); i++) {
+                categoriesArray[i] = mCategories.get(i).getDescription();
+            }
+            return categoriesArray;
+        } else {
+            return null;
+        }
     }
 
     /**
