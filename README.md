@@ -27,7 +27,7 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [X] Usar Material Design para os componentes e ícones
 - [ ] Mostrar alerta de erro para o usuário em caso de ação proibida pelo servidor
 - [X] Aplicação de um ou mais padrões de projeto
-- [ ] Mais funcionalidades a incluir e descrever
+- [X] Animação de loading 
 
 ### Documentação
 O app foi documentado usando o padrão **JavaDoc** e a página de documentação com detalhes sobre as classes e seus respectivos métodos pode ser encontrada em **TesteCastGroup/documentation/index.html**. Para gerar a documentação pelo próprio Android Studio, vá em **Tools -> Generate JavaDoc**. A raiz mostra os pacotes criados na estrutura de classes e fica assim:

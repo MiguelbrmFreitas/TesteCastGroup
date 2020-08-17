@@ -31,6 +31,7 @@ import android.view.View;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
@@ -62,6 +63,9 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
     private int mCurrentPosition = -1;
 
+    private CustomButton mCustomButton;
+
+    private ProgressBar mSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
         // Inicializa o Handler para as threads
         mHandler = new Handler(Looper.getMainLooper());
+
+        mSpinner = findViewById(R.id.activity_main_progress_bar);
 
         // Faz o binding da RecyclerView com os cursos
         mRecyclerView = findViewById(R.id.activity_main_recycler_view);
@@ -92,8 +98,8 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
         mRepository.getCategories(); // Recebe as categorias da API
 
-        CustomButton fab = findViewById(R.id.activity_main_fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mCustomButton = findViewById(R.id.activity_main_fab);
+        mCustomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 // Cria intent para trocar de Activity
@@ -302,7 +308,9 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mAdapter.setData(mCourses);
+                    mAdapter.setData(mCourses); // Coloca os cursos no adapter da RecyclerView
+                    mSpinner.setVisibility(View.GONE); // Some com o loading
+                    mCustomButton.setVisibility(View.VISIBLE); // Torna o botão visível após carregarem os dados da API
                 }
             });
 
