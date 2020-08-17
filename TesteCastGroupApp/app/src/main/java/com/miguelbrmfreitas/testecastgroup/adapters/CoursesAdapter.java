@@ -76,7 +76,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             coursesViewHolder.mEditButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    // TODO: Ir para Activity de edição
+                    ((MainActivity) mContext).editCourse(mCourses.get(position));
                 }
             });
 

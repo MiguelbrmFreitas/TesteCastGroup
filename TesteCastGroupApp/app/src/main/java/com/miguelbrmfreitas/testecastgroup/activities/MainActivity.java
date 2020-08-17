@@ -24,6 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -107,18 +108,8 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         mCustomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Cria intent para trocar de Activity
-                Intent intent = new Intent(mContext, CourseDetailsActivity.class);
-
-                // Configura os dados a serem passados para a Activity
-                Bundle bundle = new Bundle();
-
-                bundle.putBoolean("is_editing", false);
-
-                CourseDetailsActivity.setInitialConfig(mCourseSubmittedListener, mCategories);
-
-                intent.putExtra(CourseDetailsActivity.KEY_EXTRA, bundle);
-                startActivity(intent);
+                // Inicia a CoursesDetailActivity em modo POST
+                startCourseDetailsActivity(false, null);
             }
         });
     }
@@ -145,9 +136,11 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Faz a chamada pra API pra POST /courses
+     * @param course        Curso a ser adicionado
+     */
     public void postCourse(Course course) {
-        // Gson gson = new Gson();
-
         JSONObject jsonObject = new JSONObject();
         JSONObject categoryJson = new JSONObject();
         try {
@@ -156,14 +149,38 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
             jsonObject.put("start_date", (course.getStartDate().getTime())/1000);
             jsonObject.put("end_date", (course.getEndDate().getTime())/1000);
             jsonObject.put("students_per_class", course.getStudentsPerClass());
-            categoryJson.put("_id", course.getCategory().getId());
-            jsonObject.put("category", categoryJson);
+            jsonObject.put("category", course.getCategory().getId());
 
             String jsonString = jsonObject.toString(); // Transforma o objeto de Course em JSON String
 
             Log.i(TAG, jsonString);
 
             mRepository.postCourse(jsonString); // Chama o método POST da API
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Faz a chamada pra API pra PUT /courses/:id
+     * @param course        Curso a ser adicionado
+     */
+    public void putCourse(Course course) {
+        JSONObject jsonObject = new JSONObject();
+        try {
+            // Cria os campos para enviar no PUT
+            jsonObject.put("description", course.getDescription());
+            jsonObject.put("start_date", (course.getStartDate().getTime())/1000);
+            jsonObject.put("end_date", (course.getEndDate().getTime())/1000);
+            jsonObject.put("students_per_class", course.getStudentsPerClass());
+            jsonObject.put("category", course.getCategory().getId());
+
+            String jsonString = jsonObject.toString(); // Transforma o objeto de Course em JSON String
+
+            Log.i(TAG, "json string nois");
+            Log.i(TAG, jsonString);
+
+            mRepository.putCourse(jsonString, course.getId()); // Chama o método PUT da API
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -231,7 +248,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
                 if (category != null) {
                     mCategories.add(category);
-                    Log.i(TAG, mCategories.get(i).getDescription());
                 }
             }
         } catch (Exception e) {
@@ -251,7 +267,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 Course course = buildCourse(jsonObject);
                 if (course != null) {
                     mCourses.add(course);
-                    Log.i(TAG, mCourses.get(i).getDescription());
                 }
             }
         } catch (Exception e) {
@@ -345,34 +360,17 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     private void postCourseResponse(@NotNull Call call, @NotNull Response response) {
         try {
             if (response.isSuccessful()) {
-                // Avisa o resultado de sucesso na tela
-                ToastMaker.showToast(this, getString(R.string.post_success));
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Avisa o resultado de sucesso na tela
+                        ToastMaker.showToast(mContext, getString(R.string.post_success));
+                    }
+                });
             } else {
                 // Pega os erros
-                Log.i(TAG, "Deu treta");
                 String responseBody = response.body().string();
-                JSONObject responseJson = new JSONObject(responseBody); // JSON Object da resposta
-                JSONArray jsonArray = responseJson.getJSONArray("errors"); // JSON Array de resposta
-                Log.i(TAG, responseBody);
-                String[] errorsArray = new String[jsonArray.length()];
-                // Pega todas as mensagens de erro
-                for(int k = 0; k < jsonArray.length(); k++) {
-                    errorsArray[k] = jsonArray.getJSONObject(k).getString("msg");
-                    ToastMaker.showToast(this, errorsArray[k]);
-                }
-
-//                Intent intent = new Intent(mContext, CourseDetailsActivity.class);
-//
-//                // Configura os dados a serem passados para a Activity
-//                Bundle bundle = new Bundle();
-//
-//                bundle.putStringArray("errors", errorsArray);
-//
-////                CourseDetailsActivity.setInitialConfig(mCourseSubmittedListener, mCategories);
-//
-//                intent.putExtra(CourseDetailsActivity.KEY_EXTRA, bundle);
-//                startActivity(intent);
-//                finish();
+                handleResponse(responseBody);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -386,7 +384,42 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      * @param response  Objeto da resposta
      */
     private void putCourseResponse(@NotNull Call call, @NotNull Response response) {
+        try {
+            if (response.isSuccessful()) {
+                Log.i(TAG, "PUT success");
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Avisa o resultado de sucesso na tela
+                        ToastMaker.showToast(mContext, getString(R.string.post_success));
+                    }
+                });
+            } else {
+                // Pega os erros
+                String responseBody = response.body().string();
+                Log.i(TAG, responseBody);
+                handleResponse(responseBody);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        Log.i(TAG, response.message());
+    }
 
+    private void handleResponse(String responseBody) {
+        try {
+            JSONObject responseJson = new JSONObject(responseBody); // JSON Object da resposta
+            JSONArray jsonArray = responseJson.getJSONArray("errors"); // JSON Array de resposta
+            Log.i(TAG, responseBody);
+            String[] errorsArray = new String[jsonArray.length()];
+            // Pega todas as mensagens de erro
+            for(int k = 0; k < jsonArray.length(); k++) {
+                errorsArray[k] = jsonArray.getJSONObject(k).getString("msg");
+                ToastMaker.showToast(this, errorsArray[k]);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -396,12 +429,15 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      */
     private void deleteCourseResponse(@NotNull Call call, @NotNull Response response) {
         if (response.isSuccessful()) {
+            // Roda na thread principal para atualizar a view
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
-                    mCourses.remove(mCurrentPosition); // Remove
-                    mAdapter.setData(mCourses);
                     ToastMaker.showToast(mContext, getString(R.string.delete_success));
+                    if (mCourses != null) {
+                        mCourses.remove(mCurrentPosition); // Remove
+                        mAdapter.setData(mCourses);
+                    }
                 }
             });
         }
@@ -418,6 +454,38 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         deleteDialogFragment.show(fm, "fragment_delete_dialog");
     }
 
+    /**
+     * Vai para a Activity de editar o curso
+     * @param course        curso a ser editado
+     */
+    public void editCourse(Course course) {
+        startCourseDetailsActivity(true, course);
+    }
+
+    private void startCourseDetailsActivity(boolean isEditing, Course course) {
+        // Cria intent para trocar de Activity
+        Intent intent = new Intent(mContext, CourseDetailsActivity.class);
+
+        // Configura os dados a serem passados para a Activity
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("is_editing", isEditing);
+        // Atributos a serem enviados do curso já existente
+        if (isEditing && course != null) {
+            // Seta os atributos do curso no Bundle
+            bundle.putString("description", course.getDescription());
+            bundle.putLong("start_date", course.getStartDate().getTime());
+            bundle.putLong("end_date", course.getEndDate().getTime());
+            bundle.putInt("students_number", course.getStudentsPerClass());
+            bundle.putInt("category_code", Integer.parseInt(course.getCategory().getCode()));
+            bundle.putString("id", course.getId());
+        }
+
+        CourseDetailsActivity.setInitialConfig(mCourseSubmittedListener, mCategories);
+
+        intent.putExtra(CourseDetailsActivity.KEY_EXTRA, bundle);
+        startActivity(intent);
+    }
+
     @Override
     public void deleteCourse(String courseId, boolean delete) {
         if (delete) {
@@ -427,8 +495,12 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     }
 
     @Override
-    public void onSubmit(Course newCourse) {
+    public void onSubmit(Course newCourse, boolean isEditing) {
         Log.i(TAG, newCourse.getDescription());
-        postCourse(newCourse);
+        if (!isEditing) {
+            postCourse(newCourse);
+        } else {
+            putCourse(newCourse);
+        }
     }
 }

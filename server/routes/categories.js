@@ -10,7 +10,7 @@ const Category = require('../models/Category');
 router.get('/', async (req, res) => {
     try {
         // Pega todas as categorias do banco de dados
-        const categories = await Category.find().sort({start_date: -1});
+        const categories = await Category.find();
 
         // Retorna as categorias encontradas
         res.json(categories);

@@ -21,7 +21,7 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [X] Conectar com a API feita para este projeto
 - [X] Mostrar lista de cursos na tela
 - [X] Ação de cadastrar curso com descrição, categoria, número de alunos e datas de início e fim
-- [ ] Ação de editar curso
+- [X] Ação de editar curso
 - [X] Ação de remover curso
 - [ ] Filtrar cursos por categoria
 - [X] Usar Material Design para os componentes e ícones

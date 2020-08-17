@@ -65,6 +65,8 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
 
     private static CourseDetailsActivity.CourseSubmittedListener mCourseSubmittedListener;
 
+    private String mCourseId = "";
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -101,15 +103,15 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
             Date endDate = new Date(bundle.getLong("end_date"));
             String description = bundle.getString("description");
             int studentsNumber = bundle.getInt("students_number");
-            String categoryId = bundle.getString("category_id");
             int categoryCode = bundle.getInt("category_code");
+            mCourseId = bundle.getString("id");
 
             // Seta os estados iniciais
-            //mStartDatePicker.updateDate(startDate.getYear(), startDate.getMonth(), startDate.getDay());
-            //mEndDatePicker.updateDate(endDate.getYear(), endDate.getMonth(), endDate.getDay());
             mEditTextDescription.setText(description);
-            //mStudentsPicker.setValue(studentsNumber);
+            mStudentsPicker.setText("" + studentsNumber);
             mCategoryPicker.setValue(categoryCode);
+            mStartDatePicker.setText(dateToString(startDate));
+            mEndDatePicker.setText(dateToString(endDate));
         } else {
             // Estados iniciais para o caso do POST (novo curso)
             mCategoryPicker.setValue(1);
@@ -143,25 +145,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
         mCustomButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isEditing) {
-                    // Valida se todos os campos necessários estão preenchidos
-                    Log.i(TAG, "E aeeee");
-                    boolean validationPassed = validateFields();
-                    if (validationPassed) {
-                        Intent intent = new Intent(mContext, MainActivity.class);
-
-                        // Constrói o curso a partir dos fields e envia para a MainActivity
-                        Course newCourse = buildCourse();
-                        mCourseSubmittedListener.onSubmit(newCourse);
-
-                        finish();
-
-                        ToastMaker.showToast(mContext, "Curso adicionado!");
-                        startActivity(intent);
-                    }
-                } else {
-                    Log.i(TAG, "Não faz sentido");
-                }
+                goBackToMainActivity(isEditing);
             }
         });
     }
@@ -328,6 +312,36 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
         }
     }
 
+    /**
+     * Volta para a Activity principal após a ação ser feita
+     * @param isEditing     flag para diferenciar POST e PUT
+     */
+    private void goBackToMainActivity(boolean isEditing) {
+        // Valida se todos os campos necessários estão preenchidos
+        boolean validationPassed = validateFields();
+        if (validationPassed) {
+            Intent intent = new Intent(mContext, MainActivity.class);
+
+            // Constrói o curso a partir dos fields e envia para a MainActivity
+            Course newCourse = buildCourse();
+            if (isEditing) {
+                newCourse.setId(mCourseId);
+            }
+            mCourseSubmittedListener.onSubmit(newCourse, isEditing);
+
+            finish();
+
+//            ToastMaker.showToast(mContext, "Curso adicionado!");
+            startActivity(intent);
+        }
+    }
+
+    /**
+     * Seta a configuração inicial antes do objeto iniciar
+     * Toda instância da Activity já tem que ter acesso às categorias
+     * @param listener          Listener para callback
+     * @param categories        Lista de categorias
+     */
     public static void setInitialConfig(CourseDetailsActivity.CourseSubmittedListener listener, ArrayList<Category> categories) {
         mCourseSubmittedListener = listener;
         mCategories = categories;
@@ -340,7 +354,8 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
         /**
          * Método de callback para submeter o novo curso
          * @param newCourse     novo curso a ser enviado
+         * @param isEditing     Flag booleana que diz se está editando ou não
          */
-        void onSubmit(Course newCourse);
+        void onSubmit(Course newCourse, boolean isEditing);
     }
 }

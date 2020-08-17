@@ -123,8 +123,6 @@ public class RepositoryApiServices implements Subject
                 .header("Content-Type", "application/json")
                 .build();
 
-        Response response = null;
-
         // Executa o POST request e recebe a resposta da API
         makeRequest(request, client, ResponseType.POST_COURSES);
     }
@@ -137,7 +135,9 @@ public class RepositoryApiServices implements Subject
     public void putCourse(String jsonString, String id) {
         String url = mBaseUrl + "/courses/" + id;
 
-        MediaType mediaType = MediaType.parse("application/json");
+        MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+
+        Log.i(TAG, "" +id);
 
         RequestBody requestBody = RequestBody.create(jsonString, mediaType);
 
@@ -147,11 +147,12 @@ public class RepositoryApiServices implements Subject
         Request request = new Request.Builder()
                 .url(url)
                 .put(requestBody)
-                .header("Accept", "application/json")
+                .header("Accept", "/*")
                 .header("Content-Type", "application/json")
+                .header("Connection", "keep-alive")
+                .header("Accept-Encoding", "gzip, deflate, br")
+                .header("Cache-Control", "no-cache")
                 .build();
-
-        Response response = null;
 
         // Executa o PUT request e recebe a resposta da API
         makeRequest(request, client, ResponseType.PUT_COURSES);
