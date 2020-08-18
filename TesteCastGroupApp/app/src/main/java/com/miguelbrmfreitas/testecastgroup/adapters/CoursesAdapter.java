@@ -1,6 +1,7 @@
 package com.miguelbrmfreitas.testecastgroup.adapters;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,7 @@ import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
 import com.miguelbrmfreitas.testecastgroup.R;
-import com.miguelbrmfreitas.testecastgroup.activities.CourseDetailsActivity;
 import com.miguelbrmfreitas.testecastgroup.activities.MainActivity;
-import com.miguelbrmfreitas.testecastgroup.fragments.DeleteDialogFragment;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
 
 import java.text.SimpleDateFormat;
@@ -20,8 +19,9 @@ import java.util.Date;
 import java.util.Locale;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import static android.content.ContentValues.TAG;
 
 public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 {
@@ -93,7 +93,6 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         }
     }
 
-
     /**
      * Classe para definir o view holder com o layout de cada item do adapter
      */
@@ -152,9 +151,19 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * Configura os dados do adapter
      * @param courses       Array de courses
      */
-    public void setData( ArrayList<Course> courses) {
+    public void setData(ArrayList<Course> courses) {
+        Log.i(TAG, "" + courses.size());
         mCourses = courses;
+        Log.i(TAG, "" + mCourses.size());
         notifyDataSetChanged();
+    }
+
+    private void removeData() {
+        for (int i = 0; i < mCourses.size(); i++) {
+            mCourses.remove(i);
+            notifyItemRemoved(i);
+            notifyItemRangeChanged(i, mCourses.size());
+        }
     }
 
     /**

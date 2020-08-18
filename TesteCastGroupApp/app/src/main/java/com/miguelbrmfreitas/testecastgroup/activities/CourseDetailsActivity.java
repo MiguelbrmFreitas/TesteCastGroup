@@ -342,7 +342,6 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
 
             finish();
 
-//            ToastMaker.showToast(mContext, "Curso adicionado!");
             startActivity(intent);
         }
     }

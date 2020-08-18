@@ -1,4 +1,4 @@
-<!-- fragment_edit_name.xml -->
+<!-- fragment_delete_dialog.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/fragment_delete_dialog_layout"

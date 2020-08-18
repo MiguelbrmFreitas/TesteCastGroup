@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
 import com.miguelbrmfreitas.testecastgroup.R;
 import com.miguelbrmfreitas.testecastgroup.adapters.CoursesAdapter;
 import com.miguelbrmfreitas.testecastgroup.api.RepositoryApiServices;
@@ -13,6 +11,7 @@ import com.miguelbrmfreitas.testecastgroup.api.ResponseType;
 import com.miguelbrmfreitas.testecastgroup.components.CustomButton;
 import com.miguelbrmfreitas.testecastgroup.components.ToastMaker;
 import com.miguelbrmfreitas.testecastgroup.fragments.DeleteDialogFragment;
+import com.miguelbrmfreitas.testecastgroup.fragments.SearchDialogFragment;
 import com.miguelbrmfreitas.testecastgroup.models.Category;
 import com.miguelbrmfreitas.testecastgroup.models.Course;
 import com.miguelbrmfreitas.testecastgroup.observer.Observer;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import okhttp3.Call;
 import okhttp3.Response;
-import okhttp3.ResponseBody;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -34,21 +32,19 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Classe da Activity principal, onde o app começa
  */
-public class MainActivity extends AppCompatActivity implements Observer, DeleteDialogFragment.DeleteDialogListener, CourseDetailsActivity.CourseSubmittedListener {
+public class MainActivity extends AppCompatActivity implements Observer, DeleteDialogFragment.DeleteDialogListener, CourseDetailsActivity.CourseSubmittedListener, SearchDialogFragment.SearchDialogListener {
 
     private String TAG = "MainActivity";
 
@@ -60,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     private LinearLayoutManager mLayoutManager;
     private CoursesAdapter mAdapter;
     private ArrayList<Course> mCourses = new ArrayList<Course>();
+    private ArrayList<Course> mAllCoursesCopy = new ArrayList<Course>();
     private ArrayList<Category> mCategories = new ArrayList<Category>();
 
     private Handler mHandler;
@@ -130,7 +127,18 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
         // Ação de filtrar
         if (id == R.id.action_settings) {
-            ToastMaker.showToast(mContext, "e aeeeeee");
+            if (mCategories != null) {
+                // Cria o array com as descrições para enviar para o dialog
+                String[] categories = new String[(mCategories.size() + 1)];
+                for(int i = 0; i < mCategories.size(); i++) {
+                    categories[i] = mCategories.get(i).getDescription();
+                    Log.i(TAG, categories[i]);
+                }
+                categories[mCategories.size()] = getString(R.string.all_courses); // Para todos os cursos
+                Log.i(TAG, categories[mCategories.size()]);
+
+                showSearchDialog(categories); // Abre o dialog
+            }
 
             return true;
         }
@@ -260,14 +268,19 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      * Seta o array de courses
      * @param jsonArray     JSON Array a fazer o parser
      */
-    private void setCourses(JSONArray jsonArray) {
+    private void setCourses(final JSONArray jsonArray) {
         try {
+            if (mCourses.size() > 0) {
+                mAllCoursesCopy = mCourses;
+                mCourses.removeAll(mCourses.subList(0, (mCourses.size())));
+            }
             // Faz a iteração pelo JSON Array e cria o array da model Course
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jsonObject = jsonArray.getJSONObject(i);
                 Course course = buildCourse(jsonObject);
                 if (course != null) {
                     mCourses.add(course);
+                    Log.i(TAG, course.getDescription());
                 }
             }
         } catch (Exception e) {
@@ -297,6 +310,9 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 break;
             case DELETE_COURSES:
                 deleteCourseResponse(call, response);
+                break;
+            case FILTER_COURSES:
+                filterCoursesResponse(call, response);
                 break;
             default:
                 break;
@@ -331,17 +347,16 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     private void getCoursesResponse(@NotNull Call call, @NotNull Response response) {
         Log.i(TAG, response.message());
         try {
-            String responseBody = response.body().string();
-            JSONArray jsonArray = new JSONArray(responseBody); // JSON Array de resposta
+            String responseBody = response.peekBody(Long.MAX_VALUE).string();
+            final JSONArray jsonArray = new JSONArray(responseBody); // JSON Array de resposta
             Log.i(TAG, responseBody);
-
-            // Constrói os cursos a partir da resposta do servidor
-            setCourses(jsonArray);
 
             // Atualiza a UI na thread principal
             mHandler.post(new Runnable() {
                 @Override
                 public void run() {
+                    // Constrói os cursos a partir da resposta do servidor
+                    setCourses(jsonArray);
                     mAdapter.setData(mCourses); // Coloca os cursos no adapter da RecyclerView
                     mSpinner.setVisibility(View.GONE); // Some com o loading
                     mCustomButton.setVisibility(View.VISIBLE); // Torna o botão visível após carregarem os dados da API
@@ -370,8 +385,8 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 });
             } else {
                 // Pega os erros
-                String responseBody = response.body().string();
-                handleResponse(responseBody);
+                String responseBody = response.peekBody(Long.MAX_VALUE).string();
+                handleErrorResponse(responseBody);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -397,9 +412,9 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 });
             } else {
                 // Pega os erros
-                String responseBody = response.body().string();
+                String responseBody = response.peekBody(Long.MAX_VALUE).string();
                 Log.i(TAG, responseBody);
-                handleResponse(responseBody);
+                handleErrorResponse(responseBody);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -407,7 +422,11 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         Log.i(TAG, response.message());
     }
 
-    private void handleResponse(String responseBody) {
+    /**
+     * Lida com a resposta em caso de erro
+     * @param responseBody      body da resposta
+     */
+    private void handleErrorResponse(String responseBody) {
         try {
             JSONObject responseJson = new JSONObject(responseBody); // JSON Object da resposta
             JSONArray jsonArray = responseJson.getJSONArray("errors"); // JSON Array de resposta
@@ -436,12 +455,23 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 public void run() {
                     ToastMaker.showToast(mContext, getString(R.string.delete_success));
                     if (mCourses != null) {
+                        //mRecyclerView.removeViewAt(mCurrentPosition);
                         mCourses.remove(mCurrentPosition); // Remove
                         mAdapter.setData(mCourses);
                     }
                 }
             });
         }
+    }
+
+    /**
+     * Classe para definir a execução após a chamada GET /courses/?category=id da API
+     * @param call      Objeto de chamada
+     * @param response  Objeto da resposta
+     */
+    private void filterCoursesResponse(@NotNull Call call, @NotNull Response response) {
+        // Funciona da mesma maneira, apenas com uma lista de cursos filtrada na resposta
+        getCoursesResponse(call, response);
     }
 
     /**
@@ -453,6 +483,13 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         FragmentManager fm = getSupportFragmentManager();
         DeleteDialogFragment deleteDialogFragment = DeleteDialogFragment.newInstance(courseId);
         deleteDialogFragment.show(fm, "fragment_delete_dialog");
+    }
+
+    public void showSearchDialog(String [] categories) {
+        Log.i(TAG, "" + categories.length);
+        FragmentManager fm = getSupportFragmentManager();
+        SearchDialogFragment searchDialogFragment = SearchDialogFragment.newInstance(categories);
+        searchDialogFragment.show(fm, "fragment_search_dialog");
     }
 
     /**
@@ -503,5 +540,42 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         } else {
             putCourse(newCourse);
         }
+    }
+
+    @Override
+    public void searchCourses(String code, boolean search) {
+        if(search && code.length() > 0) {
+            // Verifica se é o código que inclui todos os cursos e nesse caso faz o GET normal
+            String id = getCategoryId(code);
+            if (id.isEmpty()) {
+                mHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Reinicia a Activity
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                    }
+                });
+            } else {
+                mRepository.filterCourses(id);
+            }
+        }
+    }
+
+    /**
+     * Retorna o ID da categoria a partir do código
+     * @param code      Código de referência
+     * @return          ID da categoria
+     */
+    private String getCategoryId(String code) {
+        if(mCategories != null) {
+            for(int i = 0; i < mCategories.size(); i++) {
+                if (mCategories.get(i).getCode().equals(code)) {
+                    return mCategories.get(i).getId();
+                }
+            }
+        }
+        return "";
     }
 }

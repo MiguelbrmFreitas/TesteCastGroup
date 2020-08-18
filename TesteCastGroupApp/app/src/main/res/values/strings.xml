@@ -38,4 +38,6 @@
     <string name="put_success">Curso editado!</string>
     <string name="students_validation">O número de alunos deve ser 1 ou mais!</string>
     <string name="parsing_error">Erro no formato da data!</string>
+
+    <string name="all_courses">Todos os cursos</string>
 </resources>
