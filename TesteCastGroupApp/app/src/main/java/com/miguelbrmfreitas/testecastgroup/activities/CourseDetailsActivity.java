@@ -98,8 +98,6 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
         Bundle bundle = getIntent().getBundleExtra(KEY_EXTRA);
         final boolean isEditing = bundle.getBoolean("is_editing");
 
-        Log.i(TAG, "is editing " + isEditing);
-
         // Configurando o picker de categorias
         mCategoryPicker.setMinValue(1);
         mCategoryPicker.setMaxValue(4);
@@ -241,8 +239,6 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
             Date endDate = stringToDate(mEndDatePicker.getText().toString());
             int studentsNumber = Integer.parseInt(mStudentsPicker.getText().toString());
 
-            Log.i(TAG, "Start :" + startDate.getTime() + "   End: " + endDate.getTime());
-
             Calendar localCalendar = Calendar.getInstance();
 
             // Faz a validação de todos os casos e mostra um alerta na tela se houver um erro
@@ -253,7 +249,6 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
                 ToastMaker.showToast(this, getString(R.string.date_compare_validation));
                 return false;
             } else if(getDayPlusOne(startDate).compareTo(localCalendar.getTime()) < 0) {
-                Log.i(TAG, localCalendar.getTime().toString());
                 ToastMaker.showToast(this, getString(R.string.date_current_validation));
                 return false;
             } else if(studentsNumber <= 0) {
@@ -278,7 +273,7 @@ public class CourseDetailsActivity extends AppCompatActivity implements DatePick
             String description = mEditTextDescription.getText().toString();
             Date startDate = stringToDate(mStartDatePicker.getText().toString());
             Date endDate = stringToDate(mEndDatePicker.getText().toString());
-            Log.i(TAG, startDate.toString());
+
             int studentsNumber = Integer.parseInt(mStudentsPicker.getText().toString());
             int index = mCategoryPicker.getValue() - 1;
             Category category = mCategories.get(index);

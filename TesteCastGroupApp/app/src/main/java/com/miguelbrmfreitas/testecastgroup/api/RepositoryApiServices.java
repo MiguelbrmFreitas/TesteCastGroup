@@ -153,8 +153,6 @@ public class RepositoryApiServices implements Subject
 
         MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
 
-        Log.i(TAG, "" +id);
-
         RequestBody requestBody = RequestBody.create(jsonString, mediaType);
 
         OkHttpClient client = new OkHttpClient();

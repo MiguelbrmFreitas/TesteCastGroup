@@ -152,9 +152,7 @@ public class CoursesAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
      * @param courses       Array de courses
      */
     public void setData(ArrayList<Course> courses) {
-        Log.i(TAG, "" + courses.size());
         mCourses = courses;
-        Log.i(TAG, "" + mCourses.size());
         notifyDataSetChanged();
     }
 

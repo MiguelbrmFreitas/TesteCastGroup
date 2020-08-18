@@ -132,10 +132,8 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 String[] categories = new String[(mCategories.size() + 1)];
                 for(int i = 0; i < mCategories.size(); i++) {
                     categories[i] = mCategories.get(i).getDescription();
-                    Log.i(TAG, categories[i]);
                 }
                 categories[mCategories.size()] = getString(R.string.all_courses); // Para todos os cursos
-                Log.i(TAG, categories[mCategories.size()]);
 
                 showSearchDialog(categories); // Abre o dialog
             }
@@ -162,8 +160,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
             String jsonString = jsonObject.toString(); // Transforma o objeto de Course em JSON String
 
-            Log.i(TAG, jsonString);
-
             mRepository.postCourse(jsonString); // Chama o método POST da API
         } catch (JSONException e) {
             e.printStackTrace();
@@ -185,9 +181,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
             jsonObject.put("category", course.getCategory().getId());
 
             String jsonString = jsonObject.toString(); // Transforma o objeto de Course em JSON String
-
-            Log.i(TAG, "json string nois");
-            Log.i(TAG, jsonString);
 
             mRepository.putCourse(jsonString, course.getId()); // Chama o método PUT da API
         } catch (JSONException e) {
@@ -280,7 +273,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
                 Course course = buildCourse(jsonObject);
                 if (course != null) {
                     mCourses.add(course);
-                    Log.i(TAG, course.getDescription());
                 }
             }
         } catch (Exception e) {
@@ -325,12 +317,10 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      * @param response  Objeto da resposta
      */
     private void getCategoriesResponse(@NotNull Call call, @NotNull Response response) {
-        Log.i(TAG, response.message());
         try {
             String responseBody = response.body().string();
             JSONArray jsonArray = new JSONArray(responseBody); // JSON Array de resposta
             setCategories(jsonArray);
-            Log.i(TAG, responseBody);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -345,11 +335,9 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
      * @param response  Objeto da resposta
      */
     private void getCoursesResponse(@NotNull Call call, @NotNull Response response) {
-        Log.i(TAG, response.message());
         try {
             String responseBody = response.peekBody(Long.MAX_VALUE).string();
             final JSONArray jsonArray = new JSONArray(responseBody); // JSON Array de resposta
-            Log.i(TAG, responseBody);
 
             // Atualiza a UI na thread principal
             mHandler.post(new Runnable() {
@@ -391,7 +379,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.i(TAG, response.message());
     }
 
     /**
@@ -402,7 +389,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     private void putCourseResponse(@NotNull Call call, @NotNull Response response) {
         try {
             if (response.isSuccessful()) {
-                Log.i(TAG, "PUT success");
                 mHandler.post(new Runnable() {
                     @Override
                     public void run() {
@@ -413,13 +399,11 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
             } else {
                 // Pega os erros
                 String responseBody = response.peekBody(Long.MAX_VALUE).string();
-                Log.i(TAG, responseBody);
                 handleErrorResponse(responseBody);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.i(TAG, response.message());
     }
 
     /**
@@ -430,7 +414,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
         try {
             JSONObject responseJson = new JSONObject(responseBody); // JSON Object da resposta
             JSONArray jsonArray = responseJson.getJSONArray("errors"); // JSON Array de resposta
-            Log.i(TAG, responseBody);
             String[] errorsArray = new String[jsonArray.length()];
             // Pega todas as mensagens de erro
             for(int k = 0; k < jsonArray.length(); k++) {
@@ -486,7 +469,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
     }
 
     public void showSearchDialog(String [] categories) {
-        Log.i(TAG, "" + categories.length);
         FragmentManager fm = getSupportFragmentManager();
         SearchDialogFragment searchDialogFragment = SearchDialogFragment.newInstance(categories);
         searchDialogFragment.show(fm, "fragment_search_dialog");
@@ -534,7 +516,6 @@ public class MainActivity extends AppCompatActivity implements Observer, DeleteD
 
     @Override
     public void onSubmit(Course newCourse, boolean isEditing) {
-        Log.i(TAG, newCourse.getDescription());
         if (!isEditing) {
             postCourse(newCourse);
         } else {
