@@ -14,6 +14,8 @@ Aplicação Android nativa em Java para se conectar com a API descrita abaixo e 
 
 A aplicação segue boas práticas de desenvolvimento orientado a objetos, engenharia de software, tratamento de erros, usabilidade e UX. O layout é baseado no Material Design.
 
+Demonstração em vídeo: [Clique aqui](https://drive.google.com/file/d/12ESYMC8OWN1rDhlAcD34Mhk76KpzxP-t/view)
+
 ### TODO List
 - [X] Criar diagrama de casos de uso
 - [X] Criar estrutura de classes e pacotes
