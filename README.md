@@ -161,7 +161,7 @@ npm install
 ```
 
 #### Deploy
-Foi feito o deploy da aplicação node.js para o Heroku na URL: https://teste-cast-group.herokuapp.com/.
+Foi feito o deploy da aplicação node.js para o Heroku na URL: https://teste-cast-group.herokuapp.com/api/
 
 É possível assim utilizar a API por esta URL para testar as rotas como uma alternativa a rodar o servidor localmente.
 
