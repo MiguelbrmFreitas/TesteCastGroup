@@ -131,6 +131,9 @@ A resposta do GET e o body a ser enviado no PUT e no POST é através de JSONs b
 #### GET /categories
 Retorna a lista de categorias
 
+#### POST /categories
+Posta uma nova categoria (usado apenas na configuração inicial)
+
 #### GET /courses
 Retorna a lista de cursos do banco de dados
 
