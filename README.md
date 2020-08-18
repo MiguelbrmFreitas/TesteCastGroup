@@ -75,29 +75,31 @@ Não será permitida a inclusão de cursos:
 
 Em todos esses casos, o servidor retornará com STATUS 400 e uma mensagem descrevendo o erro.
 
-### Rotas
+### TODO List
+- [X] Rota GET /categories - Lista categorias existentes
+- [X] Rota POST /categories - Cadastrar categoria
+- [X] Rota POST /courses - Cadastrar um novo curso
+- [X] Rota GET /courses - Listar todos os cursos cadastrados
+- [X] Rota GET /courses + query param category - Pesquisar por cursos de determinada categoria
+- [X] Rota PUT /courses/:id - Editar curso existente
+- [X] Rota DELETE /courses/:id - Deletar curso
+- [X] Validar se a data de início de um curso não é maior que a data de final
+- [X] Validar e não permitir que um curso seja incluído no mesmo período que outro 
+- [X] Validar se o número de estudantes (caso exista) é maior ou igual a um
+- [X] Validar se o curso não está sendo registrado com a data de início anterior à data atual
+- [X] Validar se o a descrição tem no mínimo 6 e no máximo 140 caracteres
 
-Para detalhes do que esperar na resposta e o que mandar no body (caso POST e PUT), veja a subseção **Models** abaixo
+### Banco de Dados
 
-#### GET /categories
-Retorna a lista de categorias
+Foi escolhido o MongoDB como banco de dados. É um banco de dados orientado a documentos e foi criada uma model <b>Course</b> para representar um curso com todos os atributos anteriormente citados e uma model <b>Category</b> para representar uma categoria. Dentro da model <b>Course</b> existe uma referência para uma model de <b>Category</b>.
 
-#### GET /courses
-Retorna a lista de cursos do banco de dados
+Como configuração prévia do banco de dados, foram cadastradas 4 categorias utilizando o próprio método POST implementado. Cada Categoria possui campos *code* e *description*, além de um identificador único criado pelo Mongo.
 
-#### GET /courses?category=${category_id}
-Retorna a lista de cursos filtrado por uma determinada categoria
+![Lista de Categorias](img/Categories_Mongo.png)
 
-#### POST /courses
-Cadastra um novo curso
+Edite o arquivo /config/default.json para incluir a URL correta do seu banco se for testar localmente com seus próprios dados.
 
-#### PUT /courses/:id
-Atualiza/edita um curso existente
-
-#### DELETE /courses/:id
-Deleta um curso existente
-
-### Models
+#### Models
 
 #### Category
 | propriedade | tipo | descrição |
@@ -120,19 +122,33 @@ Deleta um curso existente
 
 Obs.: Ambas as models possuem por padrão um atributo **_id** que o MongoDB cria para todos os documentos.
 
-### TODO List
-- [X] Rota GET /categories - Lista categorias existentes
-- [X] Rota POST /categories - Cadastrar categoria
-- [X] Rota POST /courses - Cadastrar um novo curso
-- [X] Rota GET /courses - Listar todos os cursos cadastrados
-- [X] Rota GET /courses + query param category - Pesquisar por cursos de determinada categoria
-- [X] Rota PUT /courses/:id - Editar curso existente
-- [X] Rota DELETE /courses/:id - Deletar curso
-- [X] Validar se a data de início de um curso não é maior que a data de final
-- [X] Validar e não permitir que um curso seja incluído no mesmo período que outro 
-- [X] Validar se o número de estudantes (caso exista) é maior ou igual a um
-- [X] Validar se o curso não está sendo registrado com a data de início anterior à data atual
-- [X] Validar se o a descrição tem no mínimo 6 e no máximo 140 caracteres
+### Rotas
+
+A resposta do GET e o body a ser enviado no PUT e no POST é através de JSONs baseados nas models acima.
+
+#### GET /categories
+Retorna a lista de categorias
+
+#### GET /courses
+Retorna a lista de cursos do banco de dados
+
+#### GET /courses?category=${category_id}
+Retorna a lista de cursos filtrado por uma determinada categoria
+
+#### POST /courses
+Cadastra um novo curso
+
+#### PUT /courses/:id
+Atualiza/edita um curso existente
+
+#### DELETE /courses/:id
+Deleta um curso existente
+
+#### Rodar servidor em modo de desenvolvimento
+
+```bash
+npm run server  # Express API: 5001
+```
 
 ### Como usar
 
@@ -140,22 +156,6 @@ Obs.: Ambas as models possuem por padrão um atributo **_id** que o MongoDB cria
 
 ```bash
 npm install
-```
-
-#### Banco de Dados
-
-Foi escolhido o MongoDB como banco de dados. É um banco de dados orientado a documentos e foi criada uma model <b>Course</b> para representar um curso com todos os atributos anteriormente citados e uma model <b>Category</b> para representar uma categoria. Dentro da model <b>Course</b> existe uma referência para uma model de <b>Category</b>.
-
-Como configuração prévia do banco de dados, foram cadastradas 4 categorias utilizando o próprio método POST implementado. Cada Categoria possui campos *code* e *description*, além de um identificador único criado pelo Mongo.
-
-![Lista de Categorias](img/Categories_Mongo.png)
-
-Edite o arquivo /config/default.json para incluir a URL correta do seu banco se for testar localmente com seus próprios dados.
-
-#### Rodar servidor em modo de desenvolvimento
-
-```bash
-npm run server  # Express API: 5001
 ```
 
 #### Deploy
