@@ -25,6 +25,7 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [X] Ação de remover curso
 - [X] Filtrar cursos por categoria
 - [X] Usar Material Design para os componentes e ícones
+- [X] Validação pelo lado do app
 - [ ] Mostrar alerta de erro para o usuário em caso de ação proibida pelo servidor
 - [X] Aplicação de um ou mais padrões de projeto
 - [X] Animação de loading 
@@ -47,7 +48,7 @@ Foi escolhido o padrão de projeto **Observer** para lidar com as chamadas à AP
 Foi utilizado o padrão de projeto **Adapter** para controlar as listas de exibição, como a lista de cursos a serem exibidos na tela através de uma RecyclerView do Android.
 
 #### Singleton
-Foi utilizado o padrão de projeto **Singleton** também na classe **RepositoryApiServices**, criando uma única instância estática da classe já que ela centraliza todas as chamadas à API da aplicação.
+Foi utilizado o padrão de projeto **Singleton** também na classe **RepositoryApiServices**, criando uma única instância estática da classe já que esta centraliza todas as chamadas à API da aplicação.
 
 ### Como rodar
 
@@ -73,6 +74,51 @@ Não será permitida a inclusão de cursos:
 - 6.    com descrição maior que 140 caracteres.
 
 Em todos esses casos, o servidor retornará com STATUS 400 e uma mensagem descrevendo o erro.
+
+### Rotas
+
+Para detalhes do que esperar na resposta e o que mandar no body (caso POST e PUT), veja a subseção **Models** abaixo
+
+#### GET /categories
+Retorna a lista de categorias
+
+#### GET /courses
+Retorna a lista de cursos do banco de dados
+
+#### GET /courses?category=${category_id}
+Retorna a lista de cursos filtrado por uma determinada categoria
+
+#### POST /courses
+Cadastra um novo curso
+
+#### PUT /courses/:id
+Atualiza/edita um curso existente
+
+#### DELETE /courses/:id
+Deleta um curso existente
+
+### Models
+
+#### Category
+| propriedade | tipo | descrição |
+| ----------- | ---- | --------- |
+| code | string | código de referência |
+| description | string | descrição da categoria |
+
+#### Course
+| propriedade | tipo | descrição |
+| ----------- | ---- | --------- |
+| description | string | descrição do curso |
+| start_date | long | data inicial do curso* |
+| end_date | long | data final do curso* |
+| category | uuid | categoria do curso** |
+| students_per_class | int | número de alunos (opcional) |
+
+&ast; UNIX timestamp em segundos.
+<br/>
+&ast;&ast; Um documento da model Category é referenciada dentro de cada documento da model Course através do **_id**.
+
+Obs.: Ambas as models possuem por padrão um atributo **_id** que o MongoDB cria para todos os documentos.
 
 ### TODO List
 - [X] Rota GET /categories - Lista categorias existentes
