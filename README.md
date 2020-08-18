@@ -30,7 +30,7 @@ A aplicação segue boas práticas de desenvolvimento orientado a objetos, engen
 - [X] Animação de loading 
 
 ### Documentação
-O app foi documentado usando o padrão **JavaDoc** e a página de documentação com detalhes sobre as classes e seus respectivos métodos pode ser encontrada em **TesteCastGroup/documentation/index.html**. Para gerar a documentação pelo próprio Android Studio, vá em **Tools -> Generate JavaDoc**. A raiz mostra os pacotes criados na estrutura de classes e fica assim:
+O app foi documentado usando o padrão **JavaDoc** e a página de documentação com detalhes sobre as classes e seus respectivos métodos pode ser encontrada em **TesteCastGroupApp/documentation/index.html**. Para gerar a documentação pelo próprio Android Studio, vá em **Tools -> Generate JavaDoc**. A raiz mostra os pacotes criados na estrutura de classes e fica assim:
 
 ![JavaDoc Example](img/javadocexample1.png)
 

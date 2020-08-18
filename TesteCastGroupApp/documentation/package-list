@@ -1,6 +1,8 @@
 com.miguelbrmfreitas.testecastgroup
 com.miguelbrmfreitas.testecastgroup.activities
+com.miguelbrmfreitas.testecastgroup.adapters
 com.miguelbrmfreitas.testecastgroup.api
+com.miguelbrmfreitas.testecastgroup.components
 com.miguelbrmfreitas.testecastgroup.fragments
 com.miguelbrmfreitas.testecastgroup.models
 com.miguelbrmfreitas.testecastgroup.observer
