@@ -1,4 +1,4 @@
-# TesteCastGroup
+# TesteCastGroup - Edit: passei na vaga com esse teste :)
 Repositório para a avaliação técnica do processo seletivo da Cast Group que envolve um app Android e um backend com conexão com Banco de Dados. Foram implementados extras e adicionais conforme detalhes em **Especificações Técnicas**.
 
 # Especificações técnicas
@@ -149,18 +149,18 @@ Atualiza/edita um curso existente
 #### DELETE /courses/:id
 Deleta um curso existente
 
-#### Rodar servidor em modo de desenvolvimento
-
-```bash
-npm run server  # Express API: 5001
-```
-
 ### Como usar
 
 #### Instalando dependências
 
 ```bash
 npm install
+```
+
+#### Rodar servidor em modo de desenvolvimento
+
+```bash
+npm run server  # Express API: 5001
 ```
 
 #### Deploy
